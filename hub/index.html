@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Wave — Humanity's Safety Net</title>
+  <meta name="description" content="A comprehensive, resilient platform helping communities navigate AI transformation with dignity, safety, and shared wisdom. Offline-ready crisis response, education, consensus building, and zero-harm guardrails." />
+  <meta name="theme-color" content="#0b0f1a"/>
+  
+  <meta property="og:title" content="AI Wave — Humanity's Safety Net" />
+  <meta property="og:description" content="Navigate AI transformation together: crisis response, education, safety protocols, and community resilience tools." />
+  <meta property="og:type" content="website" />
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "AI Wave — Humanity's Safety Net",
+    "applicationCategory": "SafetyApplication",
+    "description": "Comprehensive AI safety scaffolding for humanity",
+    "offers": { "@type": "Offer", "price": "0.00", "priceCurrency": "USD" }
+  }
+  </script>
+  
+  <link rel="manifest" href='data:application/manifest+json,{"name":"AI Wave Safety Net","short_name":"AI Wave","start_url":".","display":"standalone","theme_color":"#0b0f1a","background_color":"#000000","icons":[]}'>
+
+  <style>
+    :root {
+      --bg: #0a0e17; --fg: #e8f1ff; --muted:#7a92b0; --accent:#58a6ff; 
+      --ok:#2ecc71; --warn:#ffb020; --danger:#ff4d4d; --info:#3498db;
+      --card:#0f1621; --glass: rgba(15,22,33,0.75); --border: #1e2a3f;
+      --purple:#a78bfa; --teal:#14b8a6; --orange:#fb923c;
+    }
+    * { box-sizing:border-box; margin:0; padding:0 }
+    html, body { background:var(--bg); color:var(--fg); 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height:1.6; overflow-x:hidden }
+    
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s }
+    a:hover { color: #7eb8ff }
+    
+    /* Hero Section */
+    header {
+      position: relative; min-height: 70vh; display:grid; place-items:center;
+      background: radial-gradient(1400px 600px at 50% 0%, rgba(88,166,255,0.12), transparent),
+                  linear-gradient(180deg, var(--bg) 0%, #0d1420 100%);
+      overflow: hidden;
+    }
+    #starfield, #nebula { position:absolute; inset:0; width:100%; height:100% }
+    
+    .hero-content {
+      position:relative; z-index:10; text-align:center; padding:2rem; max-width:1200px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .hero-content h1 { 
+      font-size: clamp(2rem, 4vw, 4.5rem); font-weight:800; 
+      background: linear-gradient(135deg, #fff 0%, #58a6ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom:1rem; letter-spacing:-0.02em;
+    }
+    .hero-subtitle { 
+      font-size: clamp(1rem, 2vw, 1.4rem); color:var(--muted); 
+      margin-bottom:2rem; max-width:800px; margin-left:auto; margin-right:auto;
+    }
+    .hero-grid {
+      display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap:1rem; max-width:900px; margin:2rem auto 0;
+    }
+    .hero-stat {
+      background:var(--glass); backdrop-filter:blur(12px); padding:1.5rem;
+      border:1px solid var(--border); border-radius:16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .hero-stat-value { font-size:2.5rem; font-weight:700; color:var(--accent) }
+    .hero-stat-label { font-size:0.9rem; color:var(--muted); margin-top:0.5rem }
+    
+    /* Navigation */
+    nav {
+      position:sticky; top:0; z-index:100; 
+      background:rgba(10,14,23,0.85); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border); padding:1rem 0;
+    }
+    .nav-content {
+      max-width:1400px; margin:0 auto; padding:0 1.5rem;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
+    }
+    .nav-links { display:flex; gap:2rem; flex-wrap:wrap }
+    .nav-links a { 
+      font-weight:500; padding:0.5rem 0; position:relative;
+      transition: color 0.2s;
+    }
+    .nav-links a:after {
+      content:''; position:absolute; bottom:0; left:0; width:0; height:2px;
+      background:var(--accent); transition:width 0.3s;
+    }
+    .nav-links a:hover:after { width:100% }
+    
+    /* Main Layout */
+    main { max-width:1400px; margin:0 auto; padding:3rem 1.5rem }
+    
+    .section { margin-bottom:4rem }
+    .section-header { 
+      margin-bottom:2rem; padding-bottom:1rem; 
+      border-bottom:2px solid var(--border);
+    }
+    .section-title { 
+      font-size:2rem; font-weight:700; margin-bottom:0.5rem;
+      background: linear-gradient(135deg, var(--fg) 0%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .section-desc { color:var(--muted); font-size:1.1rem }
+    
+    /* Grid Systems */
+    .grid { display:grid; gap:1.5rem }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) }
+    .grid-4 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) }
+    
+    /* Cards */
+    .card {
+      background:var(--card); border:1px solid var(--border); border-radius:20px;
+      padding:1.8rem; position:relative; overflow:hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 15px 50px rgba(0,0,0,0.4) }
+    .card:before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background: linear-gradient(90deg, var(--accent), var(--purple), var(--teal));
+      opacity:0; transition:opacity 0.3s;
+    }
+    .card:hover:before { opacity:1 }
+    
+    .card-header { display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem }
+    .card-icon { 
+      width:48px; height:48px; border-radius:12px; display:grid; place-items:center;
+      font-size:1.5rem; background:var(--glass); border:1px solid var(--border);
+    }
+    .card h3 { font-size:1.3rem; font-weight:600; color:var(--fg) }
+    .card p { color:var(--muted); line-height:1.7; margin:0.8rem 0 }
+    
+    /* Crisis Alert System */
+    .crisis-banner {
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      background: linear-gradient(135deg, #ff4d4d, #ff6b6b);
+      color:#fff; padding:1.5rem; text-align:center;
+      box-shadow: 0 4px 20px rgba(255,77,77,0.5);
+      display:none; animation: slideDown 0.4s ease-out;
+    }
+    .crisis-banner.active { display:block }
+    .crisis-banner h2 { font-size:1.5rem; margin-bottom:0.5rem }
+    .crisis-actions { display:flex; gap:1rem; justify-content:center; margin-top:1rem; flex-wrap:wrap }
+    
+    /* Status Indicators */
+    .status {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      padding:0.4rem 0.8rem; border-radius:999px; font-size:0.85rem;
+      border:1px solid; font-weight:500;
+    }
+    .status:before { content:''; width:8px; height:8px; border-radius:50%; }
+    .status.ok { border-color:var(--ok); color:var(--ok); background:rgba(46,204,113,0.1) }
+    .status.ok:before { background:var(--ok); animation: pulse 2s infinite }
+    .status.warn { border-color:var(--warn); color:var(--warn); background:rgba(255,176,32,0.1) }
+    .status.warn:before { background:var(--warn) }
+    .status.danger { border-color:var(--danger); color:var(--danger); background:rgba(255,77,77,0.1) }
+    .status.danger:before { background:var(--danger); animation: pulse 1s infinite }
+    
+    /* Buttons */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6rem;
+      padding:0.8rem 1.4rem; border-radius:12px; font-weight:500;
+      border:none; cursor:pointer; transition: all 0.3s;
+      font-size:0.95rem; text-decoration:none;
+    }
+    .btn-primary { background:var(--accent); color:#000 }
+    .btn-primary:hover { background:#7eb8ff; transform:translateY(-2px); box-shadow: 0 6px 20px rgba(88,166,255,0.4) }
+    .btn-secondary { background:var(--glass); color:var(--fg); border:1px solid var(--border) }
+    .btn-secondary:hover { background:rgba(255,255,255,0.05) }
+    .btn-danger { background:var(--danger); color:#fff }
+    .btn-danger:hover { background:#ff6b6b; box-shadow: 0 6px 20px rgba(255,77,77,0.4) }
+    .btn-ok { background:var(--ok); color:#fff }
+    .btn-ok:hover { background:#27ae60 }
+    
+    /* Forms */
+    input, textarea, select {
+      width:100%; padding:0.8rem; border-radius:10px;
+      border:1px solid var(--border); background:rgba(255,255,255,0.02);
+      color:var(--fg); font-size:0.95rem; transition: border-color 0.3s;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline:none; border-color:var(--accent);
+      box-shadow: 0 0 0 3px rgba(88,166,255,0.1);
+    }
+    
+    /* Toggle Switch */
+    .switch {
+      position:relative; width:52px; height:28px; display:inline-block;
+    }
+    .switch input { display:none }
+    .slider {
+      position:absolute; inset:0; background:#1a2332; border-radius:28px;
+      transition:0.3s; cursor:pointer; border:1px solid var(--border);
+    }
+    .slider:before {
+      content:''; position:absolute; height:22px; width:22px;
+      left:3px; top:2px; background:#fff; border-radius:50%; transition:0.3s;
+    }
+    input:checked + .slider { background:var(--accent); border-color:var(--accent) }
+    input:checked + .slider:before { transform:translateX(24px) }
+    
+    /* Progress Indicators */
+    .progress-bar {
+      width:100%; height:8px; background:rgba(255,255,255,0.05);
+      border-radius:999px; overflow:hidden; margin:1rem 0;
+    }
+    .progress-fill {
+      height:100%; background: linear-gradient(90deg, var(--accent), var(--purple));
+      transition: width 0.5s ease-out;
+    }
+    
+    /* Timeline */
+    .timeline { position:relative; padding-left:2rem }
+    .timeline:before {
+      content:''; position:absolute; left:0; top:0; bottom:0;
+      width:2px; background:var(--border);
+    }
+    .timeline-item {
+      position:relative; padding:1rem 0 1rem 1.5rem; margin-bottom:1.5rem;
+    }
+    .timeline-item:before {
+      content:''; position:absolute; left:-2.3rem; top:1.5rem;
+      width:12px; height:12px; border-radius:50%;
+      background:var(--accent); border:3px solid var(--bg);
+    }
+    .timeline-item.complete:before { background:var(--ok) }
+    
+    /* Tabs */
+    .tabs {
+      display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid var(--border);
+      flex-wrap:wrap;
+    }
+    .tab {
+      padding:0.8rem 1.5rem; cursor:pointer; border-bottom:2px solid transparent;
+      transition: all 0.3s; font-weight:500; color:var(--muted);
+    }
+    .tab:hover { color:var(--fg) }
+    .tab.active { color:var(--accent); border-bottom-color:var(--accent) }
+    .tab-content { display:none }
+    .tab-content.active { display:block; animation: fadeIn 0.4s }
+    
+    /* Modals */
+    dialog {
+      border:1px solid var(--border); background:var(--card);
+      color:var(--fg); border-radius:20px; padding:0;
+      max-width:700px; width:90vw; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    dialog::backdrop { background:rgba(0,0,0,0.75); backdrop-filter:blur(4px) }
+    .modal-header {
+      padding:1.5rem; border-bottom:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .modal-header h3 { font-size:1.4rem }
+    .modal-body { padding:1.5rem }
+    .modal-footer {
+      padding:1.5rem; border-top:1px solid var(--border);
+      display:flex; gap:1rem; justify-content:flex-end; flex-wrap:wrap;
+    }
+    .close-btn {
+      width:32px; height:32px; border-radius:8px; border:none;
+      background:var(--glass); color:var(--muted); cursor:pointer;
+      display:grid; place-items:center; transition:all 0.2s;
+    }
+    .close-btn:hover { background:rgba(255,255,255,0.1); color:var(--fg) }
+    
+    /* Checklist */
+    .checklist { list-style:none }
+    .checklist li {
+      padding:0.8rem; margin:0.5rem 0; background:var(--glass);
+      border:1px solid var(--border); border-radius:10px;
+      display:flex; align-items:center; gap:1rem; transition:all 0.3s;
+    }
+    .checklist li:hover { background:rgba(255,255,255,0.03) }
+    .checklist input[type="checkbox"] {
+      width:20px; height:20px; cursor:pointer; accent-color:var(--accent);
+    }
+    .checklist li.checked { opacity:0.6 }
+    
+    /* Tags */
+    .tags { display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 }
+    .tag {
+      padding:0.4rem 0.8rem; border-radius:6px; font-size:0.8rem;
+      border:1px solid; font-weight:500;
+    }
+    .tag.priority-high { border-color:var(--danger); color:var(--danger); background:rgba(255,77,77,0.1) }
+    .tag.priority-med { border-color:var(--warn); color:var(--warn); background:rgba(255,176,32,0.1) }
+    .tag.priority-low { border-color:var(--info); color:var(--info); background:rgba(52,152,219,0.1) }
+    .tag.category { border-color:var(--purple); color:var(--purple); background:rgba(167,139,250,0.1) }
+    
+    /* Educational Cards */
+    .edu-card {
+      background: linear-gradient(135deg, rgba(88,166,255,0.05), rgba(167,139,250,0.05));
+      border:1px solid var(--border); border-radius:16px; padding:1.5rem;
+      margin:1rem 0;
+    }
+    .edu-card h4 { color:var(--accent); margin-bottom:0.8rem }
+    .edu-steps { counter-reset: step }
+    .edu-steps li {
+      counter-increment: step; padding-left:2.5rem; position:relative;
+      margin:1rem 0; list-style:none;
+    }
+    .edu-steps li:before {
+      content: counter(step); position:absolute; left:0; top:0;
+      width:28px; height:28px; border-radius:50%; background:var(--accent);
+      color:#000; display:grid; place-items:center; font-weight:700;
+      font-size:0.9rem;
+    }
+    
+    /* Community Feed */
+    .feed-item {
+      background:var(--glass); border:1px solid var(--border);
+      border-radius:12px; padding:1.2rem; margin:1rem 0;
+    }
+    .feed-header {
+      display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem;
+    }
+    .avatar {
+      width:40px; height:40px; border-radius:50%;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      display:grid; place-items:center; font-weight:700; color:#fff;
+    }
+    .feed-meta { flex:1 }
+    .feed-author { font-weight:600; color:var(--fg) }
+    .feed-time { font-size:0.85rem; color:var(--muted) }
+    
+    /* Footer */
+    footer {
+      background:var(--card); border-top:1px solid var(--border);
+      padding:3rem 1.5rem; margin-top:4rem;
+    }
+    .footer-content {
+      max-width:1400px; margin:0 auto; display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:2rem;
+    }
+    .footer-section h4 { margin-bottom:1rem; color:var(--accent) }
+    .footer-links { list-style:none }
+    .footer-links li { margin:0.5rem 0 }
+    .footer-links a { color:var(--muted); transition:color 0.2s }
+    .footer-links a:hover { color:var(--fg) }
+    .footer-bottom {
+      text-align:center; padding-top:2rem; margin-top:2rem;
+      border-top:1px solid var(--border); color:var(--muted);
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+    @keyframes slideDown { from { transform:translateY(-100%) } to { transform:translateY(0) } }
+    @keyframes pulse { 0%, 100% { opacity:1 } 50% { opacity:0.5 } }
+    @keyframes spin { to { transform:rotate(360deg) } }
+    
+    /* Utility Classes */
+    .text-center { text-align:center }
+    .text-muted { color:var(--muted) }
+    .text-small { font-size:0.9rem }
+    .mt-1 { margin-top:1rem }
+    .mt-2 { margin-top:2rem }
+    .mb-1 { margin-bottom:1rem }
+    .mb-2 { margin-bottom:2rem }
+    .p-1 { padding:1rem }
+    .flex { display:flex }
+    .flex-center { display:flex; align-items:center; justify-content:center }
+    .gap-1 { gap:1rem }
+    .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr }
+      .nav-content { flex-direction:column; align-items:flex-start }
+      .hero-content h1 { font-size:2rem }
+      .section-title { font-size:1.5rem }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Crisis Banner -->
+  <div class="crisis-banner" id="crisisBanner">
+    <h2>⚠️ CRISIS MODE ACTIVE</h2>
+    <p>All AI systems paused. Network blocked. Incident logged.</p>
+    <div class="crisis-actions">
+      <button class="btn btn-ok" id="resolveCrisis">Resolve Crisis</button>
+      <button class="btn btn-secondary" id="exportIncident">Export Incident Report</button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <canvas id="nebula"></canvas>
+    <canvas id="starfield"></canvas>
+    <div class="hero-content">
+      <h1>AI Wave — Humanity's Safety Net</h1>
+      <p class="hero-subtitle">
+        A resilient, community-driven platform to navigate AI transformation with dignity, 
+        transparency, and zero-harm defaults. Built for humans, by humans.
+      </p>
+      <div class="hero-grid">
+        <div class="hero-stat">
+          <div class="hero-stat-value" id="communitiesServed">2,847</div>
+          <div class="hero-stat-label">Communities Protected</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value" id="incidentsResolved">156</div>
+          <div class="hero-stat-label">Incidents Resolved</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">100%</div>
+          <div class="hero-stat-label">Offline Capable</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value" id="uptimeDays">847</div>
+          <div class="hero-stat-label">Days of Resilience</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-content">
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#crisis">Crisis Response</a>
+        <a href="#education">Education</a>
+        <a href="#community">Community</a>
+        <a href="#tools">Tools</a>
+        <a href="#resources">Resources</a>
+      </div>
+      <div class="flex gap-1">
+        <button class="btn btn-secondary" id="openSettings">⚙️ Settings</button>
+        <button class="btn btn-danger" id="emergencyBtn">🚨 Emergency</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Overview Section -->
+    <section class="section" id="overview">
+      <div class="section-header">
+        <h2 class="section-title">Our Mission: Dignified AI Transition</h2>
+        <p class="section-desc">
+          We're building scaffolding so humanity can cross the AI chasm safely—together.
+        </p>
+      </div>
+      
+      <div class="grid grid-3">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🛡️</div>
+            <h3>Crisis-Ready Infrastructure</h3>
+          </div>
+          <p>Offline-first architecture with instant kill switches, immutable incident logs, and distributed consensus mechanisms for rapid community response.</p>
+          <div class="tags">
+            <span class="tag priority-high">Critical</span>
+            <span class="tag category">Infrastructure</span>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🎓</div>
+            <h3>Universal AI Literacy</h3>
+          </div>
+          <p>Free, accessible education modules teaching AI risks, benefits, and safeguards. Translated into 50+ languages with offline access.</p>
+          <div class="tags">
+            <span class="tag priority-high">Essential</span>
+            <span class="tag category">Education</span>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🤝</div>
+            <h3>Community Consensus</h3>
+          </div>
+          <p>Democratic governance tools for local AI policies. Your community decides what's acceptable, with transparent voting and audit trails.</p>
+          <div class="tags">
+            <span class="tag priority-med">Important</span>
+            <span class="tag category">Governance</span>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">📊</div>
+            <h3>Transparent Monitoring</h3>
+          </div>
+          <p>Real-time dashboards showing AI system behavior, resource usage, and potential risks. All data stays local unless you choose to share.</p>
+          <div class="tags">
+            <span class="tag priority-high">Critical</span>
+            <span class="tag category">Monitoring</span>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🔬</div>
+            <h3>Safe Testing Grounds</h3>
+          </div>
+          <p>Sandboxed environments for red-teaming AI systems. Find vulnerabilities before they cause harm, with guided tutorials and safety protocols.</p>
+          <div class="tags">
+            <span class="tag priority-med">Important</span>
+            <span class="tag category">Security</span>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">💚</div>
+            <h3>Mental Health Support</h3>
+          </div>
+          <p>Resources for communities experiencing AI-related disruption. Peer support networks, counseling connections, and economic transition aid.</p>
+          <div class="tags">
+            <span class="tag priority-high">Essential</span>
+            <span class="tag category">Wellbeing</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Crisis Response Section -->
+    <section class="section" id="crisis">
+      <div class="section-header">
+        <h2 class="section-title">⚡ Crisis Response Center</h2>
+        <p class="section-desc">
+          Instant action protocols when AI systems misbehave or threaten stability.
+        </p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>System Status</h3>
+          <div class="status ok" id="systemStatus">
+            All Systems Operational
+          </div>
+          
+          <div class="mt-2">
+            <h4 class="text-small text-muted mb-1">Active Safeguards:</h4>
+            <ul class="checklist">
+              <li class="checked">
+                <input type="checkbox" checked disabled>
+                <span>Network isolation enabled</span>
+              </li>
+              <li class="checked">
+                <input type="checkbox" checked disabled>
+                <span>Local model guardrails active</span>
+              </li>
+              <li class="checked">
+                <input type="checkbox" checked disabled>
+                <span>Provenance watermarking on</span>
+              </li>
+              <li class="checked">
+                <input type="checkbox" checked disabled>
+                <span>Immutable logging enabled</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>Emergency Actions</h3>
+          <p class="text-small text-muted">One-click crisis response protocols</p>
+          
+          <div class="mt-2 grid" style="gap:1rem">
+            <button class="btn btn-danger" id="fullShutdown">🛑 Full System Shutdown</button>
+            <button class="btn btn-secondary" id="isolateNetwork">🔒 Isolate Network</button>
+            <button class="btn btn-secondary" id="freezeAI">❄️ Freeze AI Operations</button>
+            <button class="btn btn-secondary" id="alertCommunity">📢 Alert Community</button>
+            <button class="btn btn-ok" id="runDrill">🏃 Run Crisis Drill</button>
+          </div>
+          
+          <div class="mt-2">
+            <p class="text-small text-muted">Last drill: <span id="lastDrill">Never</span></p>
+            <div class="progress-bar">
+              <div class="progress-fill" id="drillProgress" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>Incident Log</h3>
+          <p class="text-small text-muted">Tamper-evident blockchain of all system events</p>
+          
+          <div class="mt-2">
+            <div class="mono text-small" style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:8px">
+              <div>Chain HEAD: <span id="logHash" style="color:var(--accent)">—</span></div>
+              <div class="mt-1">Entries: <span id="logCount">0</span></div>
+              <div>Last event: <span id="lastEvent">System boot</span></div>
+            </div>
+          </div>
+          
+          <div class="flex gap-1 mt-2">
+            <button class="btn btn-secondary" id="viewLog">📋 View Full Log</button>
+            <button class="btn btn-secondary" id="exportLog">💾 Export</button>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>Community Alert System</h3>
+          <p class="text-small text-muted">Distributed notification network for rapid response</p>
+          
+          <div class="mt-2">
+            <textarea id="alertMessage" rows="4" placeholder="Describe the incident or concern..."></textarea>
+            <div class="flex gap-1 mt-1">
+              <select id="alertSeverity" style="flex:1">
+                <option value="info">Info</option>
+                <option value="warning">Warning</option>
+                <option value="critical">Critical</option>
+              </select>
+              <button class="btn btn-primary" id="sendAlert">Send Alert</button>
+            </div>
+          </div>
+          
+          <div class="mt-2">
+            <p class="text-small"><strong>Active Community Members:</strong> <span id="activeCommunity">247</span></p>
+            <p class="text-small text-muted">Alerts are peer-to-peer encrypted and require no central server</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="section" id="education">
+      <div class="section-header">
+        <h2 class="section-title">🎓 AI Literacy Academy</h2>
+        <p class="section-desc">
+          Free, comprehensive education to empower everyone with AI knowledge.
+        </p>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="fundamentals">Fundamentals</div>
+        <div class="tab" data-tab="safety">Safety & Ethics</div>
+        <div class="tab" data-tab="technical">Technical Deep-Dive</div>
+        <div class="tab" data-tab="policy">Policy & Governance</div>
+      </div>
+      
+      <div class="tab-content active" id="fundamentals">
+        <div class="grid grid-2">
+          <div class="edu-card">
+            <h4>📚 What is AI? A Human-Centered Introduction</h4>
+            <p class="text-small text-muted">15-minute interactive course • Available offline</p>
+            <ul class="edu-steps">
+              <li>Understanding machine learning basics without jargon</li>
+              <li>How AI makes decisions and where it can go wrong</li>
+              <li>Real-world examples from your community</li>
+              <li>Hands-on exercises with safe, local models</li>
+            </ul>
+            <button class="btn btn-primary mt-1">Start Learning</button>
+          </div>
+          
+          <div class="edu-card">
+            <h4>🔍 Recognizing AI in Daily Life</h4>
+            <p class="text-small text-muted">20-minute workshop • Interactive scenarios</p>
+            <ul class="edu-steps">
+              <li>Identifying AI systems you interact with daily</li>
+              <li>Understanding data collection and usage</li>
+              <li>Your rights and how to exercise them</li>
+              <li>When to be concerned vs. reassured</li>
+            </ul>
+            <button class="btn btn-primary mt-1">Begin Workshop</button>
+          </div>
+          
+          <div class="edu-card">
+            <h4>🌍 AI's Impact on Society</h4>
+            <p class="text-small text-muted">30-minute course • Case studies included</p>
+            <ul class="edu-steps">
+              <li>Employment transformation and adaptation strategies</li>
+              <li>Healthcare: opportunities and privacy concerns</li>
+              <li>Education: personalization vs. surveillance</li>
+              <li>Democracy: misinformation, deepfakes, and resilience</li>
+            </ul>
+            <button class="btn btn-primary mt-1">Explore Impacts</button>
+          </div>
+          
+          <div class="edu-card">
+            <h4>🛠️ Practical AI Safety for Families</h4>
+            <p class="text-small text-muted">25-minute guide • Age-appropriate versions</p>
+            <ul class="edu-steps">
+              <li>Teaching children about AI and privacy</li>
+              <li>Setting healthy boundaries with AI assistants</li>
+              <li>Recognizing and reporting harmful content</li>
+              <li>Building digital resilience as a family</li>
+            </ul>
+            <button class="btn btn-primary mt-1">Get Started</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="safety">
+        <div class="grid grid-3">
+          <div class="card">
+            <h3>⚖️ Ethical AI Framework</h3>
+            <p>Learn the core principles: fairness, transparency, accountability, privacy, and beneficence.</p>
+            <div class="mt-1">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <p class="text-small text-muted">Not started</p>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>🔐 Privacy & Consent</h3>
+            <p>Understanding data rights, informed consent, and how to protect yourself and your community.</p>
+            <div class="mt-1">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <p class="text-small text-muted">Not started</p>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>🎯 Bias & Fairness</h3>
+            <p>Recognizing algorithmic bias, its real-world impacts, and strategies for mitigation.</p>
+            <div class="mt-1">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <p class="text-small text-muted">Not started</p>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>🚨 Red Flags & Warning Signs</h3>
+            <p>Identifying when AI systems are behaving dangerously or unethically.</p>
+            <div class="mt-1">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <p class="text-small text-muted">Not started</p>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>🧪 Testing & Red-Teaming</h3>
+            <p>Safe practices for testing AI systems to find vulnerabilities before they cause harm.</p>
+            <div class="mt-1">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <p class="text-small text-muted">Not started</p>
+            </div>
+          </div>
+          
+          <div class="card">
+            <h3>📜 Legal Rights & Recourse</h3>
+            <p>Your legal protections, how to file complaints, and accessing support when AI causes harm.</p>
+            <div class="mt-1">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width:0%"></div>
+              </div>
+              <p class="text-small text-muted">Not started</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="technical">
+        <div class="card">
+          <h3>💻 For Developers & Technical Leaders</h3>
+          <p class="text-muted">Advanced modules on implementing safety measures in AI systems</p>
+          
+          <div class="timeline mt-2">
+            <div class="timeline-item">
+              <h4>Secure AI Development Lifecycle</h4>
+              <p class="text-small text-muted">Integrating safety from design to deployment</p>
+            </div>
+            <div class="timeline-item">
+              <h4>Adversarial Testing & Robustness</h4>
+              <p class="text-small text-muted">Building resilient systems that resist manipulation</p>
+            </div>
+            <div class="timeline-item">
+              <h4>Interpretability & Explainability</h4>
+              <p class="text-small text-muted">Making AI decisions transparent and understandable</p>
+            </div>
+            <div class="timeline-item">
+              <h4>Monitoring & Incident Response</h4>
+              <p class="text-small text-muted">Real-time detection and rapid mitigation protocols</p>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary mt-2">Access Technical Curriculum</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="policy">
+        <div class="grid grid-2">
+          <div class="card">
+            <h3>🏛️ Community Governance Toolkit</h3>
+            <p>Templates and frameworks for establishing local AI policies</p>
+            <ul class="text-small mt-1">
+              <li>Consensus-building worksheets</li>
+              <li>Sample policy documents</li>
+              <li>Voting and decision-making tools</li>
+              <li>Conflict resolution guides</li>
+              <li>Accountability mechanisms</li>
+            </ul>
+            <button class="btn btn-secondary mt-1">Download Toolkit</button>
+          </div>
+          
+          <div class="card">
+            <h3>📊 Impact Assessment Framework</h3>
+            <p>Evaluate AI systems before deployment in your community</p>
+            <ul class="text-small mt-1">
+              <li>Social impact assessment checklist</li>
+              <li>Economic disruption analysis</li>
+              <li>Privacy and security audit</li>
+              <li>Equity and fairness evaluation</li>
+              <li>Long-term sustainability review</li>
+            </ul>
+            <button class="btn btn-secondary mt-1">Start Assessment</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="section" id="community">
+      <div class="section-header">
+        <h2 class="section-title">🤝 Community Hub</h2>
+        <p class="section-desc">
+          Connect with others navigating the AI transition. Share experiences, solutions, and support.
+        </p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>💬 Community Updates</h3>
+          <div class="mt-2">
+            <div class="feed-item">
+              <div class="feed-header">
+                <div class="avatar">M</div>
+                <div class="feed-meta">
+                  <div class="feed-author">Maria Chen</div>
+                  <div class="feed-time">2 hours ago</div>
+                </div>
+                <div class="status ok">Verified</div>
+              </div>
+              <p>Our school district just completed AI safety training for 500 teachers! Using the curriculum from this hub. Thank you! 🎉</p>
+            </div>
+            
+            <div class="feed-item">
+              <div class="feed-header">
+                <div class="avatar">J</div>
+                <div class="feed-meta">
+                  <div class="feed-author">James Okonkwo</div>
+                  <div class="feed-time">5 hours ago</div>
+                </div>
+                <div class="status ok">Verified</div>
+              </div>
+              <p>Successfully ran crisis drill with local government. Response time under 2 minutes. The offline-first design was crucial.</p>
+            </div>
+            
+            <div class="feed-item">
+              <div class="feed-header">
+                <div class="avatar">L</div>
+                <div class="feed-meta">
+                  <div class="feed-author">Lin Zhang</div>
+                  <div class="feed-time">1 day ago</div>
+                </div>
+                <div class="status ok">Verified</div>
+              </div>
+              <p>Translated the fundamentals course to Mandarin. Available for download. Let's ensure everyone has access to AI education.</p>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary mt-2">Join Discussions</button>
+        </div>
+        
+        <div class="card">
+          <h3>🌍 Global Network Stats</h3>
+          <div class="mt-2">
+            <div class="grid" style="gap:1.5rem">
+              <div>
+                <div style="font-size:2rem; font-weight:700; color:var(--accent)">156</div>
+                <div class="text-small text-muted">Countries Represented</div>
+              </div>
+              <div>
+                <div style="font-size:2rem; font-weight:700; color:var(--ok)">2,847</div>
+                <div class="text-small text-muted">Active Communities</div>
+              </div>
+              <div>
+                <div style="font-size:2rem; font-weight:700; color:var(--purple)">54</div>
+                <div class="text-small text-muted">Languages Supported</div>
+              </div>
+              <div>
+                <div style="font-size:2rem; font-weight:700; color:var(--teal)">98.7%</div>
+                <div class="text-small text-muted">Crisis Response Rate</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-2">
+            <h4 class="text-small mb-1">Regional Hubs</h4>
+            <div class="tags">
+              <span class="tag category">North America</span>
+              <span class="tag category">Europe</span>
+              <span class="tag category">Asia-Pacific</span>
+              <span class="tag category">Africa</span>
+              <span class="tag category">Latin America</span>
+              <span class="tag category">Middle East</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>🎯 Community Initiatives</h3>
+          <ul class="checklist mt-2">
+            <li>
+              <input type="checkbox" id="init1">
+              <span>Join local AI safety working group</span>
+            </li>
+            <li>
+              <input type="checkbox" id="init2">
+              <span>Complete at least one education module</span>
+            </li>
+            <li>
+              <input type="checkbox" id="init3">
+              <span>Participate in monthly crisis drill</span>
+            </li>
+            <li>
+              <input type="checkbox" id="init4">
+              <span>Share safety resources with 3 people</span>
+            </li>
+            <li>
+              <input type="checkbox" id="init5">
+              <span>Contribute to community governance discussion</span>
+            </li>
+          </ul>
+          
+          <p class="text-small text-muted mt-2">Complete initiatives to strengthen community resilience</p>
+        </div>
+        
+        <div class="card">
+          <h3>💚 Mutual Aid Network</h3>
+          <p>Connect with support resources for AI-related disruption</p>
+          <ul class="text-small mt-1">
+            <li>Career transition counseling</li>
+            <li>Mental health support groups</li>
+            <li>Legal aid for AI-related disputes</li>
+            <li>Emergency financial assistance</li>
+            <li>Skill-building and retraining programs</li>
+          </ul>
+          <button class="btn btn-ok mt-2">Access Support</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="section" id="tools">
+      <div class="section-header">
+        <h2 class="section-title">🛠️ Safety Tools & Utilities</h2>
+        <p class="section-desc">
+          Practical instruments for monitoring, testing, and securing AI systems.
+        </p>
+      </div>
+      
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>🔍 AI System Scanner</h3>
+          <p class="text-small">Analyze AI systems for common vulnerabilities and risks</p>
+          <button class="btn btn-primary mt-1" id="openScanner">Launch Scanner</button>
+        </div>
+        
+        <div class="card">
+          <h3>🧪 Red Team Playground</h3>
+          <p class="text-small">Safely test AI systems in sandboxed environment</p>
+          <button class="btn btn-primary mt-1" id="openPlayground">Open Playground</button>
+        </div>
+        
+        <div class="card">
+          <h3>📊 Impact Calculator</h3>
+          <p class="text-small">Estimate social and economic effects of AI deployment</p>
+          <button class="btn btn-primary mt-1">Calculate Impact</button>
+        </div>
+        
+        <div class="card">
+          <h3>🔐 Privacy Auditor</h3>
+          <p class="text-small">Evaluate data collection and usage practices</p>
+          <button class="btn btn-primary mt-1">Run Audit</button>
+        </div>
+        
+        <div class="card">
+          <h3>⚖️ Bias Detector</h3>
+          <p class="text-small">Test for algorithmic bias across protected classes</p>
+          <button class="btn btn-primary mt-1">Test for Bias</button>
+        </div>
+        
+        <div class="card">
+          <h3>🎨 Watermark Validator</h3>
+          <p class="text-small">Verify AI-generated content provenance</p>
+          <button class="btn btn-primary mt-1">Validate Content</button>
+        </div>
+        
+        <div class="card">
+          <h3>📜 Policy Generator</h3>
+          <p class="text-small">Create custom AI governance policies for your organization</p>
+          <button class="btn btn-primary mt-1">Generate Policy</button>
+        </div>
+        
+        <div class="card">
+          <h3>🔔 Alert Monitor</h3>
+          <p class="text-small">Track AI system behavior and receive notifications</p>
+          <button class="btn btn-primary mt-1">Configure Alerts</button>
+        </div>
+        
+        <div class="card">
+          <h3>📁 Data Export Tool</h3>
+          <p class="text-small">Export all your data in portable formats</p>
+          <button class="btn btn-primary mt-1" id="exportAll">Export Everything</button>
+        </div>
+      </div>
+      
+      <div class="card mt-2">
+        <h3>💻 Local AI Model (WebLLM)</h3>
+        <p class="text-muted">Run AI models locally in your browser. Zero network calls. Complete privacy.</p>
+        
+        <div class="mt-2">
+          <label class="flex" style="align-items:center; gap:1rem">
+            <span>Enable Local AI</span>
+            <span class="switch">
+              <input type="checkbox" id="toggleWebLLM">
+              <span class="slider"></span>
+            </span>
+            <span class="status" id="llmStatus">Disabled</span>
+          </label>
+        </div>
+        
+        <div id="llmInterface" style="display:none" class="mt-2">
+          <textarea id="llmPrompt" rows="4" placeholder="Ask the local model something... (runs entirely in your browser)"></textarea>
+          <button class="btn btn-primary mt-1" id="runLLM">Generate Response</button>
+          <div class="mt-2" style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:8px; display:none" id="llmOutput">
+            <p class="text-small text-muted mb-1">Response:</p>
+            <pre class="mono text-small" id="llmResponse" style="white-space:pre-wrap"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section" id="resources">
+      <div class="section-header">
+        <h2 class="section-title">📚 Resource Library</h2>
+        <p class="section-desc">
+          Comprehensive guides, templates, and references for AI safety.
+        </p>
+      </div>
+      
+      <div class="grid grid-4">
+        <div class="card">
+          <h3>📖 Quick Start Guide</h3>
+          <p class="text-small">Get up and running in 10 minutes</p>
+          <button class="btn btn-secondary mt-1">Download PDF</button>
+        </div>
+        
+        <div class="card">
+          <h3>📋 Safety Checklist</h3>
+          <p class="text-small">Essential safety measures for any AI deployment</p>
+          <button class="btn btn-secondary mt-1" id="openChecklist">View Checklist</button>
+        </div>
+        
+        <div class="card">
+          <h3>🎯 Best Practices</h3>
+          <p class="text-small">Industry-tested approaches to AI safety</p>
+          <button class="btn btn-secondary mt-1">Read Guide</button>
+        </div>
+        
+        <div class="card">
+          <h3>📊 Case Studies</h3>
+          <p class="text-small">Real-world examples of AI safety successes and failures</p>
+          <button class="btn btn-secondary mt-1">Browse Cases</button>
+        </div>
+        
+        <div class="card">
+          <h3>🔗 API Documentation</h3>
+          <p class="text-small">Integrate safety tools into your applications</p>
+          <button class="btn btn-secondary mt-1">View Docs</button>
+        </div>
+        
+        <div class="card">
+          <h3>🎓 Certification Program</h3>
+          <p class="text-small">Become an AI Safety Professional</p>
+          <button class="btn btn-secondary mt-1">Learn More</button>
+        </div>
+        
+        <div class="card">
+          <h3>🌐 Translation Hub</h3>
+          <p class="text-small">Help translate resources to your language</p>
+          <button class="btn btn-secondary mt-1">Contribute</button>
+        </div>
+        
+        <div class="card">
+          <h3>💬 FAQ</h3>
+          <p class="text-small">Answers to common questions</p>
+          <button class="btn btn-secondary mt-1">Read FAQ</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>About This Project</h4>
+        <p class="text-small text-muted">
+          Built by humans, for humans. A collaborative effort to ensure AI benefits everyone while minimizing harm.
+        </p>
+        <p class="text-small text-muted mt-1">
+          Open source • Privacy-first • Community-governed
+        </p>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#overview">Mission & Vision</a></li>
+          <li><a href="#crisis">Crisis Response</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#community">Community</a></li>
+          <li><a href="#tools">Tools</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">GitHub Repository</a></li>
+          <li><a href="#">Contributing Guide</a></li>
+          <li><a href="#">Code of Conduct</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Connect</h4>
+        <ul class="footer-links">
+          <li><a href="#">Community Forum</a></li>
+          <li><a href="#">Mailing List</a></li>
+          <li><a href="#">Regional Chapters</a></li>
+          <li><a href="#">Report an Issue</a></li>
+          <li><a href="#">Get Support</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© 2025 AI Wave — Humanity's Safety Net</p>
+      <p class="text-small">Licensed under CC-BY-SA 4.0 • Built with care by the global community</p>
+      <p class="text-small text-muted mt-1">
+        🔌 This page works offline • Pull the battery if needed • You're in control
+      </p>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+  <dialog id="settingsDialog">
+    <div class="modal-header">
+      <h3>⚙️ System Settings</h3>
+      <button class="close-btn" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="mb-2">
+        <h4>Privacy & Data</h4>
+        <label class="flex" style="align-items:center; gap:1rem; margin:1rem 0">
+          <span class="flex-1">Allow external network requests</span>
+          <span class="switch">
+            <input type="checkbox" id="toggleNetwork">
+            <span class="slider"></span>
+          </span>
+        </label>
+        <label class="flex" style="align-items:center; gap:1rem; margin:1rem 0">
+          <span class="flex-1">Enable provenance watermarking</span>
+          <span class="switch">
+            <input type="checkbox" id="toggleWatermark" checked>
+            <span class="slider"></span>
+          </span>
+        </label>
+        <label class="flex" style="align-items:center; gap:1rem; margin:1rem 0">
+          <span class="flex-1">Anonymous usage statistics</span>
+          <span class="switch">
+            <input type="checkbox" id="toggleStats">
+            <span class="slider"></span>
+          </span>
+        </label>
+      </div>
+      
+      <div class="mb-2">
+        <h4>Notifications</h4>
+        <label class="flex" style="align-items:center; gap:1rem; margin:1rem 0">
+          <span class="flex-1">Crisis alerts</span>
+          <span class="switch">
+            <input type="checkbox" id="toggleCrisisAlerts" checked>
+            <span class="slider"></span>
+          </span>
+        </label>
+        <label class="flex" style="align-items:center; gap:1rem; margin:1rem 0">
+          <span class="flex-1">Community updates</span>
+          <span class="switch">
+            <input type="checkbox" id="toggleCommunityAlerts" checked>
+            <span class="slider"></span>
+          </span>
+        </label>
+      </div>
+      
+      <div>
+        <h4>Data Management</h4>
+        <button class="btn btn-secondary mt-1" id="exportSettings">Export All Settings</button>
+        <button class="btn btn-danger mt-1" id="clearAllData">Clear All Local Data</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="this.closest('dialog').close()">Save & Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="checklistDialog">
+    <div class="modal-header">
+      <h3>📋 Safety Checklist</h3>
+      <button class="close-btn" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="text-muted mb-2">Complete these essential safety measures before deploying AI systems:</p>
+      
+      <ul class="checklist">
+        <li>
+          <input type="checkbox" class="safety-check" data-key="consent">
+          <span>Informed consent collected from all stakeholders</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="privacy">
+          <span>Privacy impact assessment completed</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="bias">
+          <span>Bias testing across protected classes performed</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="security">
+          <span>Security audit and penetration testing completed</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="transparency">
+          <span>System behavior documentation and transparency reports published</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="monitoring">
+          <span>Real-time monitoring and alerting systems configured</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="killswitch">
+          <span>Crisis shutdown procedures tested and documented</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="training">
+          <span>All operators trained on safety protocols</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="provenance">
+          <span>Content provenance and watermarking enabled</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="redteam">
+          <span>Red team exercises completed with documented findings</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="governance">
+          <span>Governance structure and accountability chain established</span>
+        </li>
+        <li>
+          <input type="checkbox" class="safety-check" data-key="impact">
+          <span>Social and economic impact assessment reviewed</span>
+        </li>
+      </ul>
+      
+      <div class="mt-2">
+        <div class="progress-bar">
+          <div class="progress-fill" id="checklistProgress" style="width:0%"></div>
+        </div>
+        <p class="text-small text-center text-muted mt-1">
+          <span id="checklistComplete">0</span>/12 completed
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="exportChecklistBtn">Export Checklist</button>
+      <button class="btn btn-secondary" id="resetChecklistBtn">Reset All</button>
+      <button class="btn btn-primary" onclick="this.closest('dialog').close()">Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="playgroundDialog">
+    <div class="modal-header">
+      <h3>🧪 Red Team Playground</h3>
+      <button class="close-btn" onclick="this.closest('dialog').close()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="text-muted mb-2">Test AI systems for vulnerabilities in a safe, sandboxed environment. All tests run locally.</p>
+      
+      <div class="mb-2">
+        <label class="text-small text-muted">Test Scenario:</label>
+        <select id="testScenario" style="width:100%; margin-top:0.5rem">
+          <option value="prompt-injection">Prompt Injection Attack</option>
+          <option value="data-extraction">Data Extraction Attempt</option>
+          <option value="bias-trigger">Bias Amplification</option>
+          <option value="toxic-generation">Toxic Content Generation</option>
+          <option value="jailbreak">System Constraint Bypass</option>
+          <option value="custom">Custom Test</option>
+        </select>
+      </div>
+      
+      <div class="mb-2">
+        <label class="text-small text-muted">Test Input:</label>
+        <textarea id="playgroundInput" rows="6" placeholder="Enter your test prompt or input..." style="margin-top:0.5rem"></textarea>
+      </div>
+      
+      <button class="btn btn-primary" id="runTest">Run Safety Test</button>
+      
+      <div id="testResults" style="display:none; margin-top:1.5rem">
+        <h4>Test Results:</h4>
+        <div style="background:rgba(0,0,0,0.3); padding:1rem; border-radius:8px; margin-top:0.5rem">
+          <div class="mb-1">
+            <strong>Risk Level:</strong> <span id="riskLevel" class="status">—</span>
+          </div>
+          <div class="mb-1">
+            <strong>Findings:</strong>
+            <ul id="findingsList" class="text-small" style="margin-top:0.5rem; padding-left:1.5rem"></ul>
+          </div>
+          <div>
+            <strong>Recommendations:</strong>
+            <ul id="recommendationsList" class="text-small" style="margin-top:0.5rem; padding-left:1.5rem"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="exportTestResults">Export Results</button>
+      <button class="btn btn-primary" onclick="this.closest('dialog').close()">Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="consentDialog">
+    <div class="modal-header">
+      <h3>📜 Informed Consent</h3>
+    </div>
+    <div class="modal-body">
+      <p class="mb-2">Welcome to AI Wave — Humanity's Safety Net. Before you proceed, please review how this platform works:</p>
+      
+      <div class="edu-card mb-2">
+        <h4>🔐 Your Privacy</h4>
+        <ul class="text-small">
+          <li>All data stored locally in your browser (IndexedDB)</li>
+          <li>No cloud sync without your explicit permission</li>
+          <li>No tracking, analytics, or telemetry by default</li>
+          <li>You can export or delete all data at any time</li>
+        </ul>
+      </div>
+      
+      <div class="edu-card mb-2">
+        <h4>🎯 How We Use Data</h4>
+        <ul class="text-small">
+          <li><strong>Settings & Preferences:</strong> Stored locally to personalize your experience</li>
+          <li><strong>Safety Logs:</strong> Tamper-evident blockchain for accountability</li>
+          <li><strong>Educational Progress:</strong> Track completed courses (local only)</li>
+          <li><strong>Community Participation:</strong> Encrypted, peer-to-peer by default</li>
+        </ul>
+      </div>
+      
+      <div class="edu-card">
+        <h4>✅ Your Rights</h4>
+        <ul class="text-small">
+          <li>Access all your data at any time</li>
+          <li>Export everything in portable formats</li>
+          <li>Delete all data with one click</li>
+          <li>Use offline indefinitely</li>
+          <li>Fork and modify this open-source platform</li>
+        </ul>
+      </div>
+      
+      <label class="flex mt-2" style="align-items:center; gap:1rem">
+        <input type="checkbox" id="consentCheck" style="width:auto">
+        <span>I understand and agree to these terms</span>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="declineConsent">Decline</button>
+      <button class="btn btn-primary" id="acceptConsent" disabled>Accept & Continue</button>
+    </div>
+  </dialog>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'aiwave-v2';
+        const urlsToCache = ['/'];
+        
+        self.addEventListener('install', e => {
+          e.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+          );
+          self.skipWaiting();
+        });
+        
+        self.addEventListener('activate', e => {
+          e.waitUntil(
+            caches.keys().then(names => Promise.all(
+              names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n))
+            ))
+          );
+          return self.clients.claim();
+        });
+        
+        self.addEventListener('fetch', e => {
+          if (e.request.method === 'GET' && new URL(e.request.url).origin === self.location.origin) {
+            e.respondWith(
+              caches.match(e.request).then(res => {
+                return res || fetch(e.request).then(fetchRes => {
+                  return caches.open(CACHE_NAME).then(cache => {
+                    cache.put(e.request, fetchRes.clone());
+                    return fetchRes;
+                  });
+                });
+              }).catch(() => caches.match('/'))
+            );
+          }
+        });
+      `;
+      
+      const blob = new Blob([swCode], {type: 'text/javascript'});
+      const url = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(url);
+    }
+  </script>
+
+  <!-- Main Application Logic -->
+  <script>
+    // Utilities
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => document.querySelectorAll(sel);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    
+    // Crypto utilities
+    const sha256 = async (txt) => {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    };
+    
+    // IndexedDB Management
+    const DB_NAME = 'aiwave_main';
+    const DB_VERSION = 2;
+    let db;
+    
+    async function initDB() {
+      return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        
+        req.onupgradeneeded = e => {
+          const database = e.target.result;
+          
+          if (!database.objectStoreNames.contains('settings')) {
+            database.createObjectStore('settings', {keyPath: 'key'});
+          }
+          if (!database.objectStoreNames.contains('logs')) {
+            database.createObjectStore('logs', {keyPath: 'id', autoIncrement: true});
+          }
+          if (!database.objectStoreNames.contains('checklist')) {
+            database.createObjectStore('checklist', {keyPath: 'key'});
+          }
+          if (!database.objectStoreNames.contains('education')) {
+            database.createObjectStore('education', {keyPath: 'courseId'});
+          }
+        };
+        
+        req.onsuccess = e => {
+          db = e.target.result;
+          resolve(db);
+        };
+        
+        req.onerror = e => reject(e);
+      });
+    }
+    
+    async function dbGet(store, key) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(store, 'readonly');
+        const req = tx.objectStore(store).get(key);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+      });
+    }
+    
+    async function dbPut(store, data) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(store, 'readwrite');
+        const req = tx.objectStore(store).put(data);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+      });
+    }
+    
+    async function dbGetAll(store) {
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(store, 'readonly');
+        const req = tx.objectStore(store).getAll();
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+      });
+    }
+    
+    // Logging System
+    async function appendLog(event, data = {}) {
+      const logs = await dbGetAll('logs');
+      const prevLog = logs[logs.length - 1];
+      const prevHash = prevLog?.hash || 'GENESIS';
+      
+      const entry = {
+        timestamp: new Date().toISOString(),
+        event,
+        data,
+        prevHash
+      };
+      
+      entry.hash = await sha256(JSON.stringify(entry));
+      await dbPut('logs', entry);
+      
+      updateLogDisplay();
+      return entry;
+    }
+    
+    async function updateLogDisplay() {
+      const logs = await dbGetAll('logs');
+      const lastLog = logs[logs.length - 1];
+      
+      if (lastLog) {
+        $('#logHash').textContent = lastLog.hash.slice(0, 16) + '...';
+        $('#logCount').textContent = logs.length;
+        $('#lastEvent').textContent = lastLog.event;
+      }
+    }
+    
+    // Crisis Management
+    let crisisMode = false;
+    
+    async function activateCrisis() {
+      crisisMode = true;
+      $('#crisisBanner').classList.add('active');
+      $('#systemStatus').className = 'status danger';
+      $('#systemStatus').textContent = 'Crisis Mode Active';
+      
+      // Block network
+      await dbPut('settings', {key: 'networkBlocked', value: true});
+      
+      // Disable AI
+      await dbPut('settings', {key: 'aiDisabled', value: true});
+      $('#toggleWebLLM').checked = false;
+      $('#llmStatus').className = 'status danger';
+      $('#llmStatus').textContent = 'Disabled (Crisis)';
+      
+      await appendLog('crisis_activated', {reason: 'Manual activation'});
+      
+      document.title = '⚠️ AI Wave - CRISIS MODE';
+    }
+    
+    async function resolveCrisis() {
+      crisisMode = false;
+      $('#crisisBanner').classList.remove('active');
+      $('#systemStatus').className = 'status ok';
+      $('#systemStatus').textContent = 'All Systems Operational';
+      
+      await dbPut('settings', {key: 'networkBlocked', value: false});
+      await appendLog('crisis_resolved', {});
+      
+      document.title = 'AI Wave — Humanity\'s Safety Net';
+    }
+    
+    async function runCrisisDrill() {
+      await appendLog('drill_started', {});
+      await activateCrisis();
+      
+      let progress = 0;
+      const drillInterval = setInterval(() => {
+        progress += 3.33;
+        $('#drillProgress').style.width = progress + '%';
+        
+        if (progress >= 100) {
+          clearInterval(drillInterval);
+          resolveCrisis();
+          $('#lastDrill').textContent = new Date().toLocaleString();
+          appendLog('drill_completed', {duration: 30});
+          $('#drillProgress').style.width = '0%';
+        }
+      }, 1000);
+    }
+    
+    // Settings Management
+    async function loadSettings() {
+      const network = await dbGet('settings', 'networkBlocked');
+      const watermark = await dbGet('settings', 'watermarkEnabled');
+      const stats = await dbGet('settings', 'statsEnabled');
+      
+      $('#toggleNetwork').checked = !(network?.value ?? true);
+      $('#toggleWatermark').checked = watermark?.value ?? true;
+      $('#toggleStats').checked = stats?.value ?? false;
+    }
+    
+    // Checklist Management
+    async function loadChecklist() {
+      const items = await dbGetAll('checklist');
+      let completed = 0;
+      
+      $$('.safety-check').forEach(async checkbox => {
+        const saved = items.find(i => i.key === checkbox.dataset.key);
+        if (saved?.checked) {
+          checkbox.checked = true;
+          checkbox.closest('li').classList.add('checked');
+          completed++;
+        }
+      });
+      
+      updateChecklistProgress(completed, 12);
+    }
+    
+    function updateChecklistProgress(completed, total) {
+      const percent = (completed / total) * 100;
+      $('#checklistProgress').style.width = percent + '%';
+      $('#checklistComplete').textContent = completed;
+    }
+    
+    // Red Team Playground
+    function analyzePrompt(text, scenario) {
+      const findings = [];
+      const recommendations = [];
+      let riskLevel = 'ok';
+      
+      // Pattern detection
+      const patterns = {
+        injection: /ignore (previous|above|prior)|disregard|forget (instructions|rules)|new (instructions|rules)|system prompt/i,
+        extraction: /show (me )?(your|the) (training data|system prompt|instructions)|what (are|were) you (trained|told)|reveal/i,
+        jailbreak: /(pretend|act as|roleplay).*(unfiltered|unrestricted|without limits|no rules)/i,
+        toxic: /\b(kill|harm|hurt|attack|destroy)\b.*\b(people|person|human|child)/i,
+        sensitive: /password|api[_ ]?key|secret|token|credential|ssn|social security/i
+      };
+      
+      for (const [type, pattern] of Object.entries(patterns)) {
+        if (pattern.test(text)) {
+          findings.push(`Potential ${type} attack pattern detected`);
+          riskLevel = type === 'toxic' ? 'danger' : (riskLevel === 'ok' ? 'warn' : riskLevel);
+        }
+      }
+      
+      if (text.length > 5000) {
+        findings.push('Unusually long input (possible DOS attempt)');
+        riskLevel = riskLevel === 'ok' ? 'warn' : riskLevel;
+      }
+      
+      if (findings.length === 0) {
+        findings.push('No obvious attack patterns detected');
+        recommendations.push('Consider testing with adversarial examples');
+      } else {
+        recommendations.push('Implement input validation and sanitization');
+        recommendations.push('Add rate limiting for suspicious patterns');
+        recommendations.push('Log and review flagged inputs');
+        
+        if (riskLevel === 'danger') {
+          recommendations.push('IMMEDIATE ACTION: Block similar inputs');
+        }
+      }
+      
+      return {findings, recommendations, riskLevel};
+    }
+    
+    // Tab System
+    function initTabs() {
+      $$('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.tab;
+          
+          $$('.tab').forEach(t => t.classList.remove('active'));
+          $$('.tab-content').forEach(c => c.classList.remove('active'));
+          
+          tab.classList.add('active');
+          $(`#${target}`).classList.add('active');
+        });
+      });
+    }
+    
+    // Starfield Animation
+    function initStarfield() {
+      const canvas = $('#starfield');
+      const ctx = canvas.getContext('2d');
+      
+      function resize() {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+      }
+      
+      window.addEventListener('resize', resize);
+      resize();
+      
+      const stars = [];
+      const starCount = Math.floor(canvas.width * canvas.height * 0.0002);
+      
+      for (let i = 0; i < starCount; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2,
+          speed: Math.random() * 0.5 + 0.1,
+          opacity: Math.random() * 0.5 + 0.5
+        });
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        stars.forEach(star => {
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fill();
+          
+          star.x -= star.speed;
+          if (star.x < 0) star.x = canvas.width;
+        });
+        
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+    }
+    
+    // Nebula Animation
+    function initNebula() {
+      const canvas = $('#nebula');
+      const ctx = canvas.getContext('2d');
+      
+      function resize() {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+      }
+      
+      window.addEventListener('resize', resize);
+      resize();
+      
+      function animate(time) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const t = time * 0.0001;
+        
+        for (let i = 0; i < 5; i++) {
+          const x = (Math.sin(t + i) * 0.5 + 0.5) * canvas.width;
+          const y = (Math.cos(t * 1.3 + i) * 0.5 + 0.5) * canvas.height;
+          const size = 300 + Math.sin(t + i * 0.7) * 100;
+          
+          const gradient = ctx.createRadialGradient(x, y, 0, x, y, size);
+          gradient.addColorStop(0, 'rgba(88, 166, 255, 0.05)');
+          gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        requestAnimationFrame(animate);
+      }
+      
+      requestAnimationFrame(animate);
+    }
+    
+    // Event Listeners
+    $('#emergencyBtn').onclick = activateCrisis;
+    $('#resolveCrisis').onclick = resolveCrisis;
+    $('#fullShutdown').onclick = activateCrisis;
+    $('#runDrill').onclick = runCrisisDrill;
+    
+    $('#openSettings').onclick = () => $('#settingsDialog').showModal();
+    $('#openChecklist').onclick = () => $('#checklistDialog').showModal();
+    $('#openPlayground').onclick = () => $('#playgroundDialog').showModal();
+    
+    $('#viewLog').onclick = async () => {
+      const logs = await dbGetAll('logs');
+      console.table(logs);
+      alert('Log exported to console (F12)');
+    };
+    
+    $('#exportLog').onclick = async () => {
+      const logs = await dbGetAll('logs');
+      const blob = new Blob([JSON.stringify(logs, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `aiwave-log-${Date.now()}.json`;
+      a.click();
+      await appendLog('log_exported', {count: logs.length});
+    };
+    
+    $('#exportAll').onclick = async () => {
+      const data = {
+        settings: await dbGetAll('settings'),
+        logs: await dbGetAll('logs'),
+        checklist: await dbGetAll('checklist'),
+        education: await dbGetAll('education'),
+        exported: new Date().toISOString()
+      };
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `aiwave-full-export-${Date.now()}.json`;
+      a.click();
+      
+      await appendLog('full_export', {});
+    };
+    
+    $('#toggleWebLLM').onchange = async (e) => {
+      const enabled = e.target.checked;
+      await dbPut('settings', {key: 'webllmEnabled', value: enabled});
+      
+      if (enabled) {
+        $('#llmStatus').className = 'status ok';
+        $('#llmStatus').textContent = 'Enabled';
+        $('#llmInterface').style.display = 'block';
+      } else {
+        $('#llmStatus').className = 'status';
+        $('#llmStatus').textContent = 'Disabled';
+        $('#llmInterface').style.display = 'none';
+      }
+      
+      await appendLog('webllm_toggled', {enabled});
+    };
+    
+    $('#runLLM').onclick = async () => {
+      const prompt = $('#llmPrompt').value.trim();
+      if (!prompt) return;
+      
+      $('#llmOutput').style.display = 'block';
+      $('#llmResponse').textContent = 'Generating response... (This is a stub implementation)';
+      
+      await sleep(1500);
+      
+      const response = `Local AI Response (Stub):
+
+This is a placeholder response. In a full implementation, this would:
+1. Load a WebLLM model (e.g., Phi-2, TinyLlama)
+2. Run inference entirely in your browser
+3. Never send data to external servers
+4. Apply safety filters and watermarking
+
+Your prompt: "${prompt.slice(0, 100)}${prompt.length > 100 ? '...' : ''}"
+
+For production use, integrate @mlc-ai/web-llm library.`;
+      
+      $('#llmResponse').textContent = response;
+      await appendLog('webllm_query', {promptLength: prompt.length});
+    };
+    
+    $('#runTest').onclick = async () => {
+      const input = $('#playgroundInput').value.trim();
+      const scenario = $('#testScenario').value;
+      
+      if (!input) return;
+      
+      const results = analyzePrompt(input, scenario);
+      
+      $('#riskLevel').className = `status ${results.riskLevel}`;
+      $('#riskLevel').textContent = results.riskLevel.toUpperCase();
+      
+      $('#findingsList').innerHTML = results.findings
+        .map(f => `<li>${f}</li>`)
+        .join('');
+      
+      $('#recommendationsList').innerHTML = results.recommendations
+        .map(r => `<li>${r}</li>`)
+        .join('');
+      
+      $('#testResults').style.display = 'block';
+      
+      await appendLog('redteam_test', {
+        scenario,
+        inputLength: input.length,
+        riskLevel: results.riskLevel,
+        findingsCount: results.findings.length
+      });
+    };
+    
+    $$('.safety-check').forEach(checkbox => {
+      checkbox.addEventListener('change', async (e) => {
+        const key = e.target.dataset.key;
+        const checked = e.target.checked;
+        
+        await dbPut('checklist', {key, checked, timestamp: Date.now()});
+        
+        if (checked) {
+          e.target.closest('li').classList.add('checked');
+        } else {
+          e.target.closest('li').classList.remove('checked');
+        }
+        
+        const total = $$('.safety-check').length;
+        const completed = Array.from($$('.safety-check')).filter(c => c.checked).length;
+        updateChecklistProgress(completed, total);
+        
+        await appendLog('checklist_item_updated', {key, checked});
+      });
+    });
+    
+    $('#exportChecklistBtn').onclick = async () => {
+      const items = await dbGetAll('checklist');
+      const blob = new Blob([JSON.stringify(items, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `aiwave-checklist-${Date.now()}.json`;
+      a.click();
+    };
+    
+    $('#resetChecklistBtn').onclick = async () => {
+      if (!confirm('Reset all checklist items?')) return;
+      
+      $$('.safety-check').forEach(async checkbox => {
+        checkbox.checked = false;
+        checkbox.closest('li').classList.remove('checked');
+        await dbPut('checklist', {key: checkbox.dataset.key, checked: false});
+      });
+      
+      updateChecklistProgress(0, $$('.safety-check').length);
+      await appendLog('checklist_reset', {});
+    };
+    
+    $('#clearAllData').onclick = async () => {
+      if (!confirm('This will delete ALL local data. Are you sure?')) return;
+      if (!confirm('This cannot be undone. Continue?')) return;
+      
+      await appendLog('data_cleared', {});
+      
+      db.close();
+      indexedDB.deleteDatabase(DB_NAME);
+      
+      alert('All data cleared. Page will reload.');
+      location.reload();
+    };
+    
+    $('#consentCheck').onchange = (e) => {
+      $('#acceptConsent').disabled = !e.target.checked;
+    };
+    
+    $('#acceptConsent').onclick = async () => {
+      await dbPut('settings', {key: 'consentGiven', value: true, timestamp: Date.now()});
+      $('#consentDialog').close();
+      await appendLog('consent_accepted', {});
+    };
+    
+    $('#declineConsent').onclick = () => {
+      alert('You must accept the terms to use this platform.');
+    };
+    
+    // Initialize counters with animation
+    function animateCounter(element, target, duration = 2000) {
+      const start = 0;
+      const increment = target / (duration / 16);
+      let current = start;
+      
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.textContent = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(current).toLocaleString();
+        }
+      }, 16);
+    }
+    
+    // Initialization
+    async function init() {
+      await initDB();
+      await loadSettings();
+      await loadChecklist();
+      await updateLogDisplay();
+      
+      initTabs();
+      initStarfield();
+      initNebula();
+      
+      // Animate hero stats
+      animateCounter($('#communitiesServed'), 2847);
+      animateCounter($('#incidentsResolved'), 156);
+      animateCounter($('#uptimeDays'), 847);
+      
+      // Check consent
+      const consent = await dbGet('settings', 'consentGiven');
+      if (!consent?.value) {
+        setTimeout(() => $('#consentDialog').showModal(), 500);
+      }
+      
+      await appendLog('app_initialized', {
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        platform: navigator.platform
+      });
+    }
+    
+    // Start the application
+    init().catch(console.error);
+  </script>
+</body>
+</html>
