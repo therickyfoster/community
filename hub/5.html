@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Community Hub — AI Wave</title>
+  <meta name="description" content="Global network of 2,847+ communities navigating AI transformation together. Mutual aid, governance tools, peer support, and shared wisdom.">
+  <style>
+    :root {
+      --bg:#0a0e17; --fg:#e8f1ff; --muted:#7a92b0; --accent:#58a6ff;
+      --ok:#2ecc71; --warn:#ffb020; --danger:#ff4d4d; --info:#3498db;
+      --card:#0f1621; --glass:rgba(15,22,33,0.75); --border:#1e2a3f;
+      --purple:#a78bfa; --teal:#14b8a6; --orange:#fb923c;
+    }
+    * { box-sizing:border-box; margin:0; padding:0 }
+    body { 
+      background:var(--bg); color:var(--fg); 
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      line-height:1.6; overflow-x:hidden;
+    }
+    
+    /* Navigation */
+    nav {
+      background:rgba(10,14,23,0.9); backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border); padding:1rem 1.5rem;
+      position:sticky; top:0; z-index:100;
+    }
+    nav a {
+      color:var(--muted); text-decoration:none; margin:0 1rem;
+      transition:color 0.2s; font-weight:500;
+    }
+    nav a:hover { color:var(--fg) }
+    
+    /* Header */
+    header {
+      background:linear-gradient(180deg, rgba(88,166,255,0.1) 0%, transparent 100%);
+      padding:3rem 1.5rem; text-align:center; position:relative; overflow:hidden;
+    }
+    header:before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(circle at 30% 50%, rgba(167,139,250,0.15), transparent 50%),
+                 radial-gradient(circle at 70% 50%, rgba(20,184,166,0.15), transparent 50%);
+      animation:pulse 8s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity:0.5 } 50% { opacity:1 } }
+    header h1 {
+      font-size:clamp(2rem,4vw,3.5rem); font-weight:800; margin-bottom:0.8rem;
+      background:linear-gradient(135deg,var(--fg),var(--accent),var(--purple));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; position:relative; z-index:1;
+    }
+    header .subtitle {
+      font-size:clamp(1rem,2vw,1.3rem); color:var(--muted);
+      max-width:800px; margin:0 auto 2rem; position:relative; z-index:1;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1.5rem; max-width:1200px; margin:2rem auto; padding:0 1.5rem;
+      position:relative; z-index:1;
+    }
+    .stat-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:1.5rem; text-align:center;
+      box-shadow:0 8px 32px rgba(0,0,0,0.3); transition:transform 0.3s;
+    }
+    .stat-card:hover { transform:translateY(-4px) }
+    .stat-value {
+      font-size:2.5rem; font-weight:700;
+      background:linear-gradient(135deg,var(--accent),var(--purple));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; display:block; margin-bottom:0.5rem;
+    }
+    .stat-label { color:var(--muted); font-size:0.9rem }
+    
+    /* Main Content */
+    main { max-width:1400px; margin:0 auto; padding:3rem 1.5rem }
+    .section { margin-bottom:4rem }
+    .section-header {
+      margin-bottom:2rem; padding-bottom:1rem;
+      border-bottom:2px solid var(--border);
+    }
+    .section-title {
+      font-size:2rem; font-weight:700; margin-bottom:0.5rem;
+      background:linear-gradient(135deg,var(--fg),var(--accent));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .section-desc { color:var(--muted); font-size:1.1rem }
+    
+    /* Grid Layouts */
+    .grid { display:grid; gap:1.5rem }
+    .grid-2 { grid-template-columns:repeat(auto-fit,minmax(400px,1fr)) }
+    .grid-3 { grid-template-columns:repeat(auto-fit,minmax(300px,1fr)) }
+    .grid-4 { grid-template-columns:repeat(auto-fit,minmax(250px,1fr)) }
+    
+    /* Cards */
+    .card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:20px; padding:1.8rem; position:relative;
+      box-shadow:0 10px 40px rgba(0,0,0,0.3);
+      transition:transform 0.3s,box-shadow 0.3s;
+    }
+    .card:hover { transform:translateY(-4px); box-shadow:0 15px 50px rgba(0,0,0,0.4) }
+    .card h3 { margin-bottom:1rem; color:var(--accent); font-size:1.3rem }
+    .card p { color:var(--muted); margin:0.5rem 0; line-height:1.7 }
+    
+    /* Feed Items */
+    .feed {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:20px; padding:1.5rem; max-height:600px;
+      overflow-y:auto;
+    }
+    .feed-item {
+      background:var(--glass); border:1px solid var(--border);
+      border-radius:12px; padding:1.2rem; margin-bottom:1rem;
+      transition:background 0.2s;
+    }
+    .feed-item:hover { background:rgba(255,255,255,0.05) }
+    .feed-item:last-child { margin-bottom:0 }
+    .feed-header {
+      display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem;
+    }
+    .avatar {
+      width:48px; height:48px; border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--purple));
+      display:grid; place-items:center; font-weight:700;
+      color:#fff; font-size:1.2rem; flex-shrink:0;
+    }
+    .feed-meta { flex:1 }
+    .feed-author { font-weight:600; color:var(--fg) }
+    .feed-time { font-size:0.85rem; color:var(--muted) }
+    .feed-content { color:var(--muted); line-height:1.6 }
+    .feed-actions {
+      display:flex; gap:1rem; margin-top:0.8rem; padding-top:0.8rem;
+      border-top:1px solid var(--border);
+    }
+    .feed-action {
+      display:flex; align-items:center; gap:0.4rem;
+      color:var(--muted); font-size:0.85rem; cursor:pointer;
+      transition:color 0.2s;
+    }
+    .feed-action:hover { color:var(--accent) }
+    
+    /* Status Badge */
+    .status {
+      display:inline-flex; align-items:center; gap:0.5rem;
+      padding:0.3rem 0.7rem; border-radius:999px;
+      font-size:0.8rem; border:1px solid; font-weight:500;
+    }
+    .status.verified { 
+      border-color:var(--ok); color:var(--ok); 
+      background:rgba(46,204,113,0.1);
+    }
+    .status.active {
+      border-color:var(--accent); color:var(--accent);
+      background:rgba(88,166,255,0.1);
+    }
+    
+    /* Buttons */
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6rem;
+      padding:0.8rem 1.4rem; border-radius:12px; font-weight:500;
+      border:none; cursor:pointer; transition:all 0.3s;
+      font-size:0.95rem; text-decoration:none;
+    }
+    .btn-primary { background:var(--accent); color:#000 }
+    .btn-primary:hover { background:#7eb8ff; transform:translateY(-2px) }
+    .btn-secondary { background:var(--glass); color:var(--fg); border:1px solid var(--border) }
+    .btn-secondary:hover { background:rgba(255,255,255,0.05) }
+    .btn-success { background:var(--ok); color:#fff }
+    .btn-success:hover { background:#27ae60 }
+    
+    /* Tags */
+    .tags { display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0 }
+    .tag {
+      padding:0.4rem 0.8rem; border-radius:6px; font-size:0.8rem;
+      border:1px solid; font-weight:500;
+    }
+    .tag.region { border-color:var(--accent); color:var(--accent); background:rgba(88,166,255,0.1) }
+    .tag.topic { border-color:var(--purple); color:var(--purple); background:rgba(167,139,250,0.1) }
+    .tag.urgent { border-color:var(--danger); color:var(--danger); background:rgba(255,77,77,0.1) }
+    
+    /* Regional Map */
+    .region-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1.5rem; margin:2rem 0;
+    }
+    .region-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:16px; padding:1.5rem; position:relative;
+      transition:transform 0.3s;
+    }
+    .region-card:hover { transform:translateY(-4px) }
+    .region-icon {
+      font-size:3rem; margin-bottom:0.5rem; display:block;
+    }
+    .region-name {
+      font-size:1.2rem; font-weight:600; margin-bottom:0.5rem;
+      color:var(--fg);
+    }
+    .region-stats { color:var(--muted); font-size:0.9rem }
+    .region-stats div { margin:0.3rem 0 }
+    
+    /* Initiatives */
+    .initiative-list { list-style:none }
+    .initiative-item {
+      background:var(--glass); border:1px solid var(--border);
+      border-radius:12px; padding:1rem; margin:0.8rem 0;
+      display:flex; align-items:center; gap:1rem;
+      transition:all 0.3s;
+    }
+    .initiative-item:hover { background:rgba(255,255,255,0.05) }
+    .initiative-checkbox {
+      width:24px; height:24px; border:2px solid var(--border);
+      border-radius:6px; cursor:pointer; flex-shrink:0;
+      display:grid; place-items:center; transition:all 0.3s;
+    }
+    .initiative-item.completed .initiative-checkbox {
+      background:var(--ok); border-color:var(--ok);
+    }
+    .initiative-item.completed .initiative-checkbox:after {
+      content:'✓'; color:#fff; font-weight:700;
+    }
+    .initiative-content { flex:1 }
+    .initiative-title { font-weight:600; color:var(--fg) }
+    .initiative-desc { font-size:0.85rem; color:var(--muted); margin-top:0.2rem }
+    
+    /* Mutual Aid */
+    .aid-category {
+      background:linear-gradient(135deg,rgba(88,166,255,0.05),rgba(167,139,250,0.05));
+      border:1px solid var(--border); border-radius:16px;
+      padding:1.5rem; margin:1rem 0;
+    }
+    .aid-category h4 {
+      color:var(--accent); margin-bottom:1rem;
+      display:flex; align-items:center; gap:0.5rem;
+    }
+    .aid-resources { list-style:none }
+    .aid-resources li {
+      padding:0.6rem 0; display:flex; align-items:center; gap:0.8rem;
+      border-bottom:1px solid var(--border);
+    }
+    .aid-resources li:last-child { border-bottom:none }
+    .aid-resources li:before {
+      content:'→'; color:var(--accent); font-weight:700;
+    }
+    .aid-link {
+      color:var(--fg); text-decoration:none; transition:color 0.2s;
+    }
+    .aid-link:hover { color:var(--accent) }
+    
+    /* Input Forms */
+    textarea, input {
+      width:100%; padding:0.8rem; border-radius:10px;
+      border:1px solid var(--border); background:rgba(0,0,0,0.3);
+      color:var(--fg); font-family:inherit; font-size:0.95rem;
+      transition:border-color 0.3s;
+    }
+    textarea:focus, input:focus {
+      outline:none; border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(88,166,255,0.1);
+    }
+    
+    /* Tabs */
+    .tabs {
+      display:flex; gap:0.5rem; margin-bottom:1.5rem;
+      border-bottom:1px solid var(--border); flex-wrap:wrap;
+    }
+    .tab {
+      padding:0.8rem 1.5rem; cursor:pointer;
+      border-bottom:2px solid transparent;
+      transition:all 0.3s; font-weight:500; color:var(--muted);
+    }
+    .tab:hover { color:var(--fg) }
+    .tab.active { color:var(--accent); border-bottom-color:var(--accent) }
+    .tab-content { display:none }
+    .tab-content.active { display:block; animation:fadeIn 0.4s }
+    
+    /* Modal */
+    dialog {
+      border:1px solid var(--border); background:var(--card);
+      color:var(--fg); border-radius:20px; padding:0;
+      max-width:700px; width:90vw;
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    }
+    dialog::backdrop { background:rgba(0,0,0,0.75); backdrop-filter:blur(4px) }
+    .modal-header {
+      padding:1.5rem; border-bottom:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .modal-body { padding:1.5rem; max-height:60vh; overflow-y:auto }
+    .modal-footer {
+      padding:1.5rem; border-top:1px solid var(--border);
+      display:flex; gap:1rem; justify-content:flex-end; flex-wrap:wrap;
+    }
+    .close-btn {
+      width:32px; height:32px; border-radius:8px; border:none;
+      background:var(--glass); color:var(--muted); cursor:pointer;
+      display:grid; place-items:center; transition:all 0.2s;
+    }
+    .close-btn:hover { background:rgba(255,255,255,0.1); color:var(--fg) }
+    
+    /* Animations */
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+    
+    /* Responsive */
+    @media (max-width:768px) {
+      .grid-2, .grid-3, .grid-4 { grid-template-columns:1fr }
+      header h1 { font-size:2rem }
+      .section-title { font-size:1.5rem }
+      nav a { margin:0 0.5rem }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">← Home</a>
+    <a href="crisis-response.html">Crisis Response</a>
+    <a href="education.html">Education</a>
+    <a href="tools.html">Tools</a>
+    <a href="resources.html">Resources</a>
+  </nav>
+
+  <header>
+    <h1>🤝 Community Hub</h1>
+    <p class="subtitle">
+      Join 2,847+ communities worldwide navigating AI transformation together. 
+      Share wisdom, access support, build resilience.
+    </p>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-value">2,847</span>
+        <span class="stat-label">Active Communities</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">156</span>
+        <span class="stat-label">Countries</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">847,203</span>
+        <span class="stat-label">Members</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">98.7%</span>
+        <span class="stat-label">Response Rate</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Community Feed Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Community Updates</h2>
+        <p class="section-desc">Real-time updates from communities worldwide</p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div class="feed">
+          <div class="feed-item">
+            <div class="feed-header">
+              <div class="avatar">MC</div>
+              <div class="feed-meta">
+                <div class="feed-author">Maria Chen</div>
+                <div class="feed-time">2 hours ago • San Francisco, CA</div>
+              </div>
+              <span class="status verified">✓ Verified</span>
+            </div>
+            <div class="feed-content">
+              Our school district just completed AI safety training for 500 teachers using the curriculum from this platform. 
+              The response has been overwhelmingly positive. Teachers feel empowered rather than threatened. 
+              Thank you to the community for the incredible resources! 🎉
+            </div>
+            <div class="tags">
+              <span class="tag region">North America</span>
+              <span class="tag topic">Education</span>
+            </div>
+            <div class="feed-actions">
+              <span class="feed-action" onclick="likePost(this)">
+                <span>👍</span> <span class="like-count">47</span>
+              </span>
+              <span class="feed-action" onclick="commentPost()">
+                <span>💬</span> <span>12</span>
+              </span>
+              <span class="feed-action" onclick="sharePost()">
+                <span>↗️</span> Share
+              </span>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="feed-header">
+              <div class="avatar">JO</div>
+              <div class="feed-meta">
+                <div class="feed-author">James Okonkwo</div>
+                <div class="feed-time">5 hours ago • Lagos, Nigeria</div>
+              </div>
+              <span class="status verified">✓ Verified</span>
+            </div>
+            <div class="feed-content">
+              Successfully ran crisis drill with local government officials. Response time under 2 minutes! 
+              The offline-first design was crucial since internet reliability is a concern here. 
+              Now training 10 neighboring communities on the same protocols.
+            </div>
+            <div class="tags">
+              <span class="tag region">Africa</span>
+              <span class="tag topic">Crisis Response</span>
+            </div>
+            <div class="feed-actions">
+              <span class="feed-action" onclick="likePost(this)">
+                <span>👍</span> <span class="like-count">89</span>
+              </span>
+              <span class="feed-action" onclick="commentPost()">
+                <span>💬</span> <span>23</span>
+              </span>
+              <span class="feed-action" onclick="sharePost()">
+                <span>↗️</span> Share
+              </span>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="feed-header">
+              <div class="avatar">LZ</div>
+              <div class="feed-meta">
+                <div class="feed-author">Lin Zhang</div>
+                <div class="feed-time">1 day ago • Beijing, China</div>
+              </div>
+              <span class="status verified">✓ Verified</span>
+            </div>
+            <div class="feed-content">
+              Completed translation of the Fundamentals course to Mandarin. Now available for download! 
+              Working with universities across Asia to integrate AI safety education into CS curricula. 
+              Let's ensure everyone has access regardless of language.
+            </div>
+            <div class="tags">
+              <span class="tag region">Asia-Pacific</span>
+              <span class="tag topic">Translation</span>
+            </div>
+            <div class="feed-actions">
+              <span class="feed-action" onclick="likePost(this)">
+                <span>👍</span> <span class="like-count">156</span>
+              </span>
+              <span class="feed-action" onclick="commentPost()">
+                <span>💬</span> <span>34</span>
+              </span>
+              <span class="feed-action" onclick="sharePost()">
+                <span>↗️</span> Share
+              </span>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="feed-header">
+              <div class="avatar">AS</div>
+              <div class="feed-meta">
+                <div class="feed-author">Aisha Sharma</div>
+                <div class="feed-time">1 day ago • Mumbai, India</div>
+              </div>
+              <span class="status verified">✓ Verified</span>
+            </div>
+            <div class="feed-content">
+              Started mutual aid network for workers displaced by AI automation. 47 members placed in retraining programs so far. 
+              We're using the Impact Calculator to forecast which sectors need support next. 
+              Community resilience is real when we work together! 💪
+            </div>
+            <div class="tags">
+              <span class="tag region">Asia-Pacific</span>
+              <span class="tag topic">Mutual Aid</span>
+            </div>
+            <div class="feed-actions">
+              <span class="feed-action" onclick="likePost(this)">
+                <span>👍</span> <span class="like-count">203</span>
+              </span>
+              <span class="feed-action" onclick="commentPost()">
+                <span>💬</span> <span>45</span>
+              </span>
+              <span class="feed-action" onclick="sharePost()">
+                <span>↗️</span> Share
+              </span>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="feed-header">
+              <div class="avatar">TR</div>
+              <div class="feed-meta">
+                <div class="feed-author">Thomas Rousseau</div>
+                <div class="feed-time">2 days ago • Paris, France</div>
+              </div>
+              <span class="status verified">✓ Verified</span>
+            </div>
+            <div class="feed-content">
+              EU AI Act compliance workshop held with 15 startups. Used the Policy Generator to create GDPR-compliant frameworks. 
+              Companies actually thanked us - they were overwhelmed trying to navigate regulations alone. 
+              This is what community support looks like.
+            </div>
+            <div class="tags">
+              <span class="tag region">Europe</span>
+              <span class="tag topic">Policy</span>
+            </div>
+            <div class="feed-actions">
+              <span class="feed-action" onclick="likePost(this)">
+                <span>👍</span> <span class="like-count">94</span>
+              </span>
+              <span class="feed-action" onclick="commentPost()">
+                <span>💬</span> <span>18</span>
+              </span>
+              <span class="feed-action" onclick="sharePost()">
+                <span>↗️</span> Share
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:1.5rem">
+            <h3>📝 Share Your Story</h3>
+            <p style="margin-bottom:1rem">Tell the community about your AI safety journey</p>
+            <textarea rows="4" placeholder="What's happening in your community?" id="postContent"></textarea>
+            <div style="display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap">
+              <select style="flex:1; padding:0.6rem; border-radius:8px; border:1px solid var(--border); background:rgba(0,0,0,0.3); color:var(--fg)">
+                <option>Choose region...</option>
+                <option>North America</option>
+                <option>Europe</option>
+                <option>Asia-Pacific</option>
+                <option>Africa</option>
+                <option>Latin America</option>
+                <option>Middle East</option>
+              </select>
+              <select style="flex:1; padding:0.6rem; border-radius:8px; border:1px solid var(--border); background:rgba(0,0,0,0.3); color:var(--fg)">
+                <option>Choose topic...</option>
+                <option>Education</option>
+                <option>Crisis Response</option>
+                <option>Policy</option>
+                <option>Mutual Aid</option>
+                <option>Translation</option>
+                <option>Research</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" onclick="publishPost()" style="width:100%; margin-top:1rem">
+              Publish Update
+            </button>
+          </div>
+
+          <div class="card">
+            <h3>🌍 Network Activity</h3>
+            <div style="margin-top:1rem">
+              <div style="display:flex; justify-content:space-between; margin:0.8rem 0">
+                <span style="color:var(--muted)">Active now:</span>
+                <span style="font-weight:600; color:var(--ok)">2,847 communities</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin:0.8rem 0">
+                <span style="color:var(--muted)">Posts today:</span>
+                <span style="font-weight:600; color:var(--accent)">1,243</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin:0.8rem 0">
+                <span style="color:var(--muted)">Avg response time:</span>
+                <span style="font-weight:600; color:var(--teal)">2.3 hours</span>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin:0.8rem 0">
+                <span style="color:var(--muted)">Crisis alerts (24h):</span>
+                <span style="font-weight:600; color:var(--ok)">0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Regional Hubs Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Regional Hubs</h2>
+        <p class="section-desc">Connect with local communities and response teams</p>
+      </div>
+      
+      <div class="region-grid">
+        <div class="region-card">
+          <span class="region-icon">🌏</span>
+          <h3 class="region-name">Asia-Pacific</h3>
+          <div class="region-stats">
+            <div>🏘️ <strong>923</strong> communities</div>
+            <div>👥 <strong>298,745</strong> members</div>
+            <div>🚨 <strong>31</strong> response teams</div>
+            <div>📊 Response time: <strong>2.1h</strong></div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem" onclick="openRegion('asia-pacific')">
+            Join Hub →
+          </button>
+        </div>
+
+        <div class="region-card">
+          <span class="region-icon">🌍</span>
+          <h3 class="region-name">Africa</h3>
+          <div class="region-stats">
+            <div>🏘️ <strong>384</strong> communities</div>
+            <div>👥 <strong>76,234</strong> members</div>
+            <div>🚨 <strong>12</strong> response teams</div>
+            <div>📊 Response time: <strong>3.2h</strong></div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem" onclick="openRegion('africa')">
+            Join Hub →
+          </button>
+        </div>
+
+        <div class="region-card">
+          <span class="region-icon">🌎</span>
+          <h3 class="region-name">Latin America</h3>
+          <div class="region-stats">
+            <div>🏘️ <strong>234</strong> communities</div>
+            <div>👥 <strong>42,189</strong> members</div>
+            <div>🚨 <strong>9</strong> response teams</div>
+            <div>📊 Response time: <strong>2.8h</strong></div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem" onclick="openRegion('latin-america')">
+            Join Hub →
+          </button>
+        </div>
+
+        <div class="region-card">
+          <span class="region-icon">🌍</span>
+          <h3 class="region-name">Middle East</h3>
+          <div class="region-stats">
+            <div>🏘️ <strong>77</strong> communities</div>
+            <div>👥 <strong>9,036</strong> members</div>
+            <div>🚨 <strong>4</strong> response teams</div>
+            <div>📊 Response time: <strong>4.1h</strong></div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem" onclick="openRegion('middle-east')">
+            Join Hub →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community Initiatives Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Community Initiatives</h2>
+        <p class="section-desc">Join collective action to strengthen community resilience</p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>🎯 Active Initiatives</h3>
+          <p style="margin-bottom:1.5rem">Complete initiatives to earn community recognition and strengthen safety culture</p>
+          
+          <ul class="initiative-list">
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="join-working-group">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Join local AI safety working group</div>
+                <div class="initiative-desc">Connect with nearby communities for coordination</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="complete-course">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Complete at least one education module</div>
+                <div class="initiative-desc">Build your AI literacy foundation</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="monthly-drill">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Participate in monthly crisis drill</div>
+                <div class="initiative-desc">Practice emergency response procedures</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="share-resources">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Share safety resources with 3 people</div>
+                <div class="initiative-desc">Spread AI safety knowledge in your network</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="governance-discussion">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Contribute to community governance discussion</div>
+                <div class="initiative-desc">Help shape local AI policies</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="vulnerability-report">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Report AI vulnerability or incident</div>
+                <div class="initiative-desc">Help identify and mitigate risks</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="translation-contribute">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Contribute to translation efforts</div>
+                <div class="initiative-desc">Make resources accessible in your language</div>
+              </div>
+            </li>
+            
+            <li class="initiative-item" onclick="toggleInitiative(this)" data-id="mentor-member">
+              <div class="initiative-checkbox"></div>
+              <div class="initiative-content">
+                <div class="initiative-title">Mentor a new community member</div>
+                <div class="initiative-desc">Share your experience and knowledge</div>
+              </div>
+            </li>
+          </ul>
+          
+          <div style="margin-top:1.5rem; padding:1rem; background:rgba(88,166,255,0.1); border:1px solid var(--accent); border-radius:12px">
+            <div style="display:flex; justify-content:space-between; align-items:center">
+              <span style="font-weight:600">Your Progress:</span>
+              <span style="font-size:1.5rem; font-weight:700; color:var(--accent)" id="initiativeProgress">0/8</span>
+            </div>
+            <div style="width:100%; height:8px; background:rgba(0,0,0,0.3); border-radius:4px; margin-top:0.8rem">
+              <div id="initiativeBar" style="width:0%; height:100%; background:linear-gradient(90deg,var(--accent),var(--purple)); border-radius:4px; transition:width 0.5s"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🏆 Community Recognition</h3>
+          <p style="margin-bottom:1.5rem">Members making exceptional contributions</p>
+          
+          <div style="background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem">
+            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem">
+              <div class="avatar">MC</div>
+              <div style="flex:1">
+                <div style="font-weight:600">Maria Chen</div>
+                <div style="font-size:0.85rem; color:var(--muted)">San Francisco, CA</div>
+              </div>
+              <span style="font-size:1.5rem">🥇</span>
+            </div>
+            <div style="color:var(--muted); font-size:0.9rem">
+              Trained 500+ educators • Led 12 workshops • 8/8 initiatives
+            </div>
+          </div>
+
+          <div style="background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem">
+            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem">
+              <div class="avatar">JO</div>
+              <div style="flex:1">
+                <div style="font-weight:600">James Okonkwo</div>
+                <div style="font-size:0.85rem; color:var(--muted)">Lagos, Nigeria</div>
+              </div>
+              <span style="font-size:1.5rem">🥈</span>
+            </div>
+            <div style="color:var(--muted); font-size:0.9rem">
+              10 communities trained • 15 crisis drills • 8/8 initiatives
+            </div>
+          </div>
+
+          <div style="background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem">
+            <div style="display:flex; align-items:center; gap:1rem; margin-bottom:0.8rem">
+              <div class="avatar">LZ</div>
+              <div style="flex:1">
+                <div style="font-weight:600">Lin Zhang</div>
+                <div style="font-size:0.85rem; color:var(--muted)">Beijing, China</div>
+              </div>
+              <span style="font-size:1.5rem">🥉</span>
+            </div>
+            <div style="color:var(--muted); font-size:0.9rem">
+              Mandarin translation • 8 courses published • 7/8 initiatives
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem">
+            View Leaderboard →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mutual Aid Network Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">💚 Mutual Aid Network</h2>
+        <p class="section-desc">Access support resources for AI-related disruption and challenges</p>
+      </div>
+      
+      <div class="grid grid-2">
+        <div>
+          <div class="aid-category">
+            <h4>💼 Career Transition Support</h4>
+            <ul class="aid-resources">
+              <li><a href="#" class="aid-link">Job displacement counseling (free)</a></li>
+              <li><a href="#" class="aid-link">Skills assessment & career planning</a></li>
+              <li><a href="#" class="aid-link">Resume writing for AI-augmented roles</a></li>
+              <li><a href="#" class="aid-link">Interview preparation workshops</a></li>
+              <li><a href="#" class="aid-link">Networking events with hiring managers</a></li>
+              <li><a href="#" class="aid-link">Industry-specific transition guides</a></li>
+            </ul>
+          </div>
+
+          <div class="aid-category">
+            <h4>🧠 Mental Health Support</h4>
+            <ul class="aid-resources">
+              <li><a href="#" class="aid-link">Peer support groups (weekly)</a></li>
+              <li><a href="#" class="aid-link">Licensed counselor directory</a></li>
+              <li><a href="#" class="aid-link">Crisis hotline (24/7): 1-800-AI-HELP</a></li>
+              <li><a href="#" class="aid-link">Anxiety management workshops</a></li>
+              <li><a href="#" class="aid-link">Community resilience circles</a></li>
+              <li><a href="#" class="aid-link">Meditation & mindfulness resources</a></li>
+            </ul>
+          </div>
+
+          <div class="aid-category">
+            <h4>⚖️ Legal Aid Services</h4>
+            <ul class="aid-resources">
+              <li><a href="#" class="aid-link">AI-related employment disputes</a></li>
+              <li><a href="#" class="aid-link">Privacy rights consultation</a></li>
+              <li><a href="#" class="aid-link">Discrimination & bias complaints</a></li>
+              <li><a href="#" class="aid-link">Contract review (AI vendor agreements)</a></li>
+              <li><a href="#" class="aid-link">Pro bono legal clinics (monthly)</a></li>
+              <li><a href="#" class="aid-link">Know your rights workshops</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <div class="aid-category">
+            <h4>💰 Financial Assistance</h4>
+            <ul class="aid-resources">
+              <li><a href="#" class="aid-link">Emergency grants (up to $2,000)</a></li>
+              <li><a href="#" class="aid-link">Training scholarship fund</a></li>
+              <li><a href="#" class="aid-link">Microloan program for retraining</a></li>
+              <li><a href="#" class="aid-link">Universal Basic Income pilot info</a></li>
+              <li><a href="#" class="aid-link">Utility assistance programs</a></li>
+              <li><a href="#" class="aid-link">Financial literacy workshops</a></li>
+            </ul>
+          </div>
+
+          <div class="aid-category">
+            <h4>🎓 Skill Building & Retraining</h4>
+            <ul class="aid-resources">
+              <li><a href="#" class="aid-link">Free coding bootcamps (AI-focused)</a></li>
+              <li><a href="#" class="aid-link">Digital literacy programs</a></li>
+              <li><a href="#" class="aid-link">Trade certification courses</a></li>
+              <li><a href="#" class="aid-link">Entrepreneurship training</a></li>
+              <li><a href="#" class="aid-link">Language learning scholarships</a></li>
+              <li><a href="#" class="aid-link">Professional certification funding</a></li>
+            </ul>
+          </div>
+
+          <div class="aid-category">
+            <h4>🏘️ Community Resources</h4>
+            <ul class="aid-resources">
+              <li><a href="#" class="aid-link">Local food assistance programs</a></li>
+              <li><a href="#" class="aid-link">Childcare cooperative network</a></li>
+              <li><a href="#" class="aid-link">Transportation vouchers</a></li>
+              <li><a href="#" class="aid-link">Housing assistance referrals</a></li>
+              <li><a href="#" class="aid-link">Tool & equipment lending library</a></li>
+              <li><a href="#" class="aid-link">Community garden projects</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:2rem; background:linear-gradient(135deg,rgba(46,204,113,0.1),rgba(20,184,166,0.1))">
+        <h3 style="color:var(--ok)">Need Help? Request Support</h3>
+        <p style="margin-bottom:1.5rem">
+          Our mutual aid network is here for you. All requests are confidential and handled with care.
+        </p>
+        
+        <div style="display:grid; gap:1rem">
+          <input type="text" placeholder="Your name (or anonymous)" />
+          <input type="email" placeholder="Contact email" />
+          <select style="padding:0.8rem; border-radius:10px; border:1px solid var(--border); background:rgba(0,0,0,0.3); color:var(--fg)">
+            <option>Type of support needed...</option>
+            <option>Career transition</option>
+            <option>Mental health</option>
+            <option>Legal aid</option>
+            <option>Financial assistance</option>
+            <option>Skill building</option>
+            <option>Other</option>
+          </select>
+          <textarea rows="4" placeholder="Describe your situation and what kind of help would be most useful..."></textarea>
+          
+          <button class="btn btn-success" style="width:100%">
+            Submit Request (Confidential)
+          </button>
+        </div>
+        
+        <p style="margin-top:1rem; font-size:0.85rem; color:var(--muted)">
+          ✓ All requests reviewed within 24 hours • ✓ Completely confidential • ✓ No judgment, only support
+        </p>
+      </div>
+    </section>
+
+    <!-- Governance & Decision Making Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">🗳️ Community Governance</h2>
+        <p class="section-desc">Democratic participation in AI policy and platform decisions</p>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="proposals">Active Proposals</div>
+        <div class="tab" data-tab="votes">Your Votes</div>
+        <div class="tab" data-tab="decisions">Past Decisions</div>
+      </div>
+
+      <div class="tab-content active" id="proposals">
+        <div class="grid grid-2">
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem">
+              <div>
+                <h3 style="margin-bottom:0.5rem">Proposal #47: Mandatory AI Watermarking</h3>
+                <div style="font-size:0.85rem; color:var(--muted)">
+                  Proposed by: Safety Working Group • Voting ends in 5 days
+                </div>
+              </div>
+              <span class="status active">Active</span>
+            </div>
+            
+            <p style="margin-bottom:1rem">
+              Require all AI-generated content on the platform to include C2PA watermarks for provenance verification. 
+              This would help combat misinformation and ensure transparency.
+            </p>
+            
+            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:8px; padding:1rem; margin:1rem 0">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
+                <span style="color:var(--ok)">✓ Support: 78%</span>
+                <span style="color:var(--danger)">✗ Oppose: 22%</span>
+              </div>
+              <div style="width:100%; height:8px; background:rgba(0,0,0,0.3); border-radius:4px; overflow:hidden">
+                <div style="width:78%; height:100%; background:var(--ok)"></div>
+              </div>
+              <div style="margin-top:0.8rem; font-size:0.85rem; color:var(--muted)">
+                2,143 votes cast • Quorum: 85% reached
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:1rem">
+              <button class="btn btn-success" onclick="vote('support')" style="flex:1">
+                ✓ Support
+              </button>
+              <button class="btn btn-secondary" onclick="vote('oppose')" style="flex:1">
+                ✗ Oppose
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem">
+              <div>
+                <h3 style="margin-bottom:0.5rem">Proposal #48: Regional Autonomy Guidelines</h3>
+                <div style="font-size:0.85rem; color:var(--muted)">
+                  Proposed by: Regional Coordinators • Voting ends in 12 days
+                </div>
+              </div>
+              <span class="status active">Active</span>
+            </div>
+            
+            <p style="margin-bottom:1rem">
+              Allow regional hubs to establish their own AI safety guidelines within platform framework. 
+              Recognizes cultural differences and local regulatory requirements.
+            </p>
+            
+            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:8px; padding:1rem; margin:1rem 0">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
+                <span style="color:var(--ok)">✓ Support: 65%</span>
+                <span style="color:var(--danger)">✗ Oppose: 35%</span>
+              </div>
+              <div style="width:100%; height:8px; background:rgba(0,0,0,0.3); border-radius:4px; overflow:hidden">
+                <div style="width:65%; height:100%; background:var(--ok)"></div>
+              </div>
+              <div style="margin-top:0.8rem; font-size:0.85rem; color:var(--muted)">
+                1,876 votes cast • Quorum: 74% reached
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:1rem">
+              <button class="btn btn-success" onclick="vote('support')" style="flex:1">
+                ✓ Support
+              </button>
+              <button class="btn btn-secondary" onclick="vote('oppose')" style="flex:1">
+                ✗ Oppose
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem">
+              <div>
+                <h3 style="margin-bottom:0.5rem">Proposal #49: Monthly Safety Drill Requirement</h3>
+                <div style="font-size:0.85rem; color:var(--muted)">
+                  Proposed by: Crisis Response Team • Voting ends in 3 days
+                </div>
+              </div>
+              <span class="status active">Active</span>
+            </div>
+            
+            <p style="margin-bottom:1rem">
+              Make monthly crisis drills mandatory for all communities with AI systems. 
+              Improves preparedness and response times in actual emergencies.
+            </p>
+            
+            <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:8px; padding:1rem; margin:1rem 0">
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
+                <span style="color:var(--ok)">✓ Support: 92%</span>
+                <span style="color:var(--danger)">✗ Oppose: 8%</span>
+              </div>
+              <div style="width:100%; height:8px; background:rgba(0,0,0,0.3); border-radius:4px; overflow:hidden">
+                <div style="width:92%; height:100%; background:var(--ok)"></div>
+              </div>
+              <div style="margin-top:0.8rem; font-size:0.85rem; color:var(--muted)">
+                2,567 votes cast • Quorum: 100% reached ✓
+              </div>
+            </div>
+            
+            <div style="display:flex; gap:1rem">
+              <button class="btn btn-success" onclick="vote('support')" style="flex:1">
+                ✓ Support
+              </button>
+              <button class="btn btn-secondary" onclick="vote('oppose')" style="flex:1">
+                ✗ Oppose
+              </button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>📝 Submit New Proposal</h3>
+            <p style="margin-bottom:1rem; color:var(--muted)">
+              Community members can propose platform changes, policy updates, or new initiatives
+            </p>
+            <button class="btn btn-primary" onclick="openProposalDialog()" style="width:100%">
+              Create Proposal →
+            </button>
+            <p style="margin-top:1rem; font-size:0.85rem; color:var(--muted)">
+              Requirements: 50+ community endorsements • Clear problem statement • Measurable outcomes
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="votes">
+        <div class="card">
+          <p style="text-align:center; padding:3rem; color:var(--muted)">
+            You haven't cast any votes yet. Participate in active proposals above to help shape community decisions!
+          </p>
+        </div>
+      </div>
+
+      <div class="tab-content" id="decisions">
+        <div class="card">
+          <h3 style="margin-bottom:1.5rem">Recent Decisions (Last 90 Days)</h3>
+          
+          <div style="background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
+              <strong>Proposal #46: Open Source Core Platform</strong>
+              <span style="color:var(--ok); font-weight:600">✓ PASSED</span>
+            </div>
+            <div style="font-size:0.85rem; color:var(--muted)">
+              Vote: 89% support • Implemented: 2 weeks ago
+            </div>
+          </div>
+
+          <div style="background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
+              <strong>Proposal #45: Expand Mutual Aid Fund</strong>
+              <span style="color:var(--ok); font-weight:600">✓ PASSED</span>
+            </div>
+            <div style="font-size:0.85rem; color:var(--muted)">
+              Vote: 94% support • Implemented: 3 weeks ago
+            </div>
+          </div>
+
+          <div style="background:var(--glass); border:1px solid var(--border); border-radius:12px; padding:1.2rem; margin-bottom:1rem">
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem">
+              <strong>Proposal #44: Mandatory Bias Testing</strong>
+              <span style="color:var(--danger); font-weight:600">✗ FAILED</span>
+            </div>
+            <div style="font-size:0.85rem; color:var(--muted)">
+              Vote: 42% support • Did not reach quorum
+            </div>
+          </div>
+
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem">
+            View Full History →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Get Involved Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">🚀 Get Involved</h2>
+        <p class="section-desc">Ways to contribute and strengthen the community</p>
+      </div>
+      
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>🎤 Become a Speaker</h3>
+          <p>Share your expertise at community events, webinars, and workshops.</p>
+          <ul style="list-style:none; margin:1rem 0; padding:0; color:var(--muted); font-size:0.9rem">
+            <li style="padding:0.3rem 0">✓ Reach global audience</li>
+            <li style="padding:0.3rem 0">✓ Build your reputation</li>
+            <li style="padding:0.3rem 0">✓ Share lessons learned</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%">Apply Now</button>
+        </div>
+
+        <div class="card">
+          <h3>✍️ Contribute Content</h3>
+          <p>Write guides, create tutorials, translate resources, or share case studies.</p>
+          <ul style="list-style:none; margin:1rem 0; padding:0; color:var(--muted); font-size:0.9rem">
+            <li style="padding:0.3rem 0">✓ Help others learn</li>
+            <li style="padding:0.3rem 0">✓ Earn recognition</li>
+            <li style="padding:0.3rem 0">✓ Improve platform</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%">Start Contributing</button>
+        </div>
+
+        <div class="card">
+          <h3>🛠️ Technical Contributions</h3>
+          <p>Develop new tools, fix bugs, improve documentation, or enhance features.</p>
+          <ul style="list-style:none; margin:1rem 0; padding:0; color:var(--muted); font-size:0.9rem">
+            <li style="padding:0.3rem 0">✓ Open source project</li>
+            <li style="padding:0.3rem 0">✓ GitHub recognition</li>
+            <li style="padding:0.3rem 0">✓ Skill development</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%">View GitHub</button>
+        </div>
+
+        <div class="card">
+          <h3>🌍 Regional Coordinator</h3>
+          <p>Lead local community efforts, organize events, and coordinate response teams.</p>
+          <ul style="list-style:none; margin:1rem 0; padding:0; color:var(--muted); font-size:0.9rem">
+            <li style="padding:0.3rem 0">✓ Leadership role</li>
+            <li style="padding:0.3rem 0">✓ Local impact</li>
+            <li style="padding:0.3rem 0">🌎</span>
+          <h3 class="region-name">North America</h3>
+          <div class="region-stats">
+            <div>🏘️ <strong>542</strong> communities</div>
+            <div>👥 <strong>186,432</strong> members</div>
+            <div>🚨 <strong>18</strong> response teams</div>
+            <div>📊 Response time: <strong>1.8h</strong></div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem" onclick="openRegion('north-america')">
+            Join Hub →
+          </button>
+        </div>
+
+        <div class="region-card">
+          <span class="region-icon">🌍</span>
+          <h3 class="region-name">Europe</h3>
+          <div class="region-stats">
+            <div>🏘️ <strong>687</strong> communities</div>
+            <div>👥 <strong>234,567</strong> members</div>
+            <div>🚨 <strong>24</strong> response teams</div>
+            <div>📊 Response time: <strong>1.5h</strong></div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; margin-top:1rem" onclick="openRegion('europe')">
+            Join Hub →
+          </button>
+        </div>
+
+        <div class="region-card">
+          <span class="region-icon">

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gaia Swarm — Community Hub</title>
+<meta name="description" content="A gamified community hub for planetary restoration: roles, quests, traits, items, and retroactive Ethereum rewards (placeholder).">
+<style>
+  :root{
+    --bg:#0b0f14; --fg:#e6f0ff; --muted:#9bb3d1; --accent:#6cf3c5; --accent-2:#8bb4ff;
+    --panel:#101723; --panel-2:#0e1520; --ok:#6ef3a1; --warn:#ffd27a; --danger:#ff7a93;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --radius: 16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,Segoe UI,Inter,Roboto,Helvetica,Arial}
+  a{color:var(--accent)} .muted{color:var(--muted)}
+  /* Parallax scaffold */
+  .layer{
+    position:relative; min-height:90vh; display:flex; align-items:center; justify-content:center;
+    background-attachment: fixed; background-position:center; background-size:cover;
+  }
+  .layer.hero{background-image:linear-gradient(180deg, rgba(11,15,20,.2), rgba(11,15,20,.9)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width=\"1600\" height=\"900\"><defs><linearGradient id=\"g\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0%\" stop-color=\"%230b0f14\"/><stop offset=\"100%\" stop-color=\"%23101723\"/></linearGradient></defs><rect width=\"100%\" height=\"100%\" fill=\"url(%23g)\"/><g fill=\"%231b2a3d\" opacity=\"0.5\">'+Array(200).fill(0).map((_,i)=>`<circle cx=\"${Math.random()*1600}\" cy=\"${Math.random()*900}\" r=\"${Math.random()*2+0.5}\"/>`).join('')+'</g></svg>');}
+  .layer.biomes{background-image:linear-gradient(180deg, rgba(11,15,20,.4), rgba(11,15,20,.9)), radial-gradient(1200px 600px at 10% 20%, #102132, transparent), radial-gradient(1000px 600px at 90% 80%, #0f1e2c, transparent);}
+  .layer.footer{background:#0a0e13}
+  .hero-inner{max-width:1100px; padding:8vh 24px; text-align:center}
+  h1{font-size:clamp(32px,6vw,64px); line-height:1.05; margin:.2em 0 .3em; letter-spacing:.5px}
+  .subtitle{font-size:clamp(16px,2.2vw,22px); color:var(--muted); max-width:850px; margin:0 auto}
+  .cta-row{margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  .btn{
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#02141a; border:0; padding:12px 18px; border-radius:12px; font-weight:700; cursor:pointer;
+    box-shadow:var(--shadow); transition:transform .08s ease, filter .2s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn.secondary{background:#152132; color:var(--fg); border:1px solid #1f2b3b}
+  .btn.ghost{background:transparent; border:1px solid #213249; color:var(--fg)}
+  .grid{display:grid; gap:16px}
+  .shell{max-width:1200px; margin:0 auto; padding:48px 20px}
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid #182234; border-radius:var(--radius); box-shadow:var(--shadow); padding:18px;
+  }
+  /* Tabs */
+  .tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px}
+  .tab{padding:10px 14px; border-radius:999px; border:1px solid #22324a; cursor:pointer; user-select:none}
+  .tab.active{background:linear-gradient(135deg,#19263a,#162236); border-color:#294266}
+  .tabpanes > section{display:none}
+  .tabpanes > section.active{display:block; animation:fade .2s ease-in}
+  @keyframes fade{from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:none}}
+  /* Two-column layouts */
+  .cols{display:grid; grid-template-columns:1.1fr .9fr; gap:18px}
+  @media (max-width:960px){.cols{grid-template-columns:1fr}}
+  /* Progress + badges */
+  .progress{height:10px; background:#0b1420; border-radius:999px; overflow:hidden; border:1px solid #1b2a40}
+  .progress > span{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2))}
+  .badge{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid #28405f; background:#101a2a; font-size:13px}
+  /* Inventory tags */
+  .tag{display:inline-block; padding:6px 10px; border-radius:11px; border:1px dashed #33507a; margin:4px 6px 0 0; font-size:13px; background:#0c1522}
+  /* Collapsibles */
+  details{border:1px solid #1a2a42; border-radius:12px; padding:10px 12px; background:#0d1726}
+  summary{cursor:pointer; font-weight:600}
+  /* Overlay (modal) */
+  .overlay{position:fixed; inset:0; display:none; place-items:center; background:rgba(5,10,18,.75); backdrop-filter:blur(6px); z-index:50}
+  .overlay.show{display:grid}
+  .modal{width:min(680px,92vw); background:linear-gradient(180deg,#101a2a,#0e1623); border:1px solid #1b2d49; border-radius:18px; box-shadow:var(--shadow); padding:20px}
+  /* Small UI bits */
+  .kv{display:grid; grid-template-columns:140px 1fr; gap:8px; align-items:center}
+  .stat{background:#0e1928; padding:10px 12px; border-radius:12px; border:1px solid #1a2a44; display:flex; justify-content:space-between; gap:12px}
+  .pill{padding:6px 12px; border-radius:999px; border:1px solid #2a425f}
+  .list{display:grid; gap:10px}
+  .role{display:flex; gap:12px; align-items:flex-start; border:1px solid #20324c; background:#0d1625; padding:12px; border-radius:14px}
+  .role input{margin-top:4px}
+  /* Sticky navbar */
+  .navbar{
+    position:sticky; top:0; z-index:30; background:rgba(10,14,20,.72); backdrop-filter:blur(10px);
+    display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-bottom:1px solid #15243a;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.4px}
+  .dot{width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 30% 30%, var(--accent), #1ef); box-shadow:0 0 12px var(--accent)}
+  .nav-actions{display:flex; gap:8px; flex-wrap:wrap}
+  code.inline{background:#0f1a2a; color:#bfe2ff; padding:2px 6px; border-radius:6px; border:1px solid #1a2b46}
+</style>
+</head>
+<body>
+
+<!-- Sticky mini-nav -->
+<header class="navbar">
+  <div class="brand"><span class="dot"></span> Gaia Swarm Hub</div>
+  <div class="nav-actions">
+    <button class="btn ghost" id="btnProfile">Profile</button>
+    <button class="btn secondary" id="btnClaim">Retroactive Rewards</button>
+  </div>
+</header>
+
+<!-- Parallax Hero -->
+<section class="layer hero">
+  <div class="hero-inner">
+    <h1>Regenerate the Planet. <span class="muted">Earn Together.</span></h1>
+    <p class="subtitle">
+      Pick a role, complete real-world restoration quests, level up traits & skills, and prepare for
+      <strong>retroactive Ethereum rewards</strong> when the system goes live. Your identity is a privacy-preserving
+      <em>profile mnemonic</em> (not a wallet seed).
+    </p>
+    <div class="cta-row">
+      <button class="btn" id="btnGetStarted">Get Started</button>
+      <button class="btn secondary" id="btnHow">How it works</button>
+      <button class="btn ghost" id="btnImport">Import Profile</button>
+    </div>
+  </div>
+</section>
+
+<!-- App Shell -->
+<main class="shell">
+  <div class="card">
+    <div class="tabs" id="tabs">
+      <div class="tab active" data-tab="dashboard">Dashboard</div>
+      <div class="tab" data-tab="roles">Roles</div>
+      <div class="tab" data-tab="quests">Quests</div>
+      <div class="tab" data-tab="inventory">Inventory</div>
+      <div class="tab" data-tab="skills">Skills</div>
+      <div class="tab" data-tab="leaderboard">Leaderboard</div>
+      <div class="tab" data-tab="docs">Docs</div>
+    </div>
+
+    <div class="tabpanes">
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="active">
+        <div class="cols">
+          <div class="card">
+            <h2 style="margin-top:0">Welcome, <span id="username">New Steward</span></h2>
+            <p class="muted">Profile Mnemonic: <code class="inline" id="mnemonic">—</code></p>
+            <div class="stat"><span>Level</span><strong id="level">1</strong></div>
+            <div class="stat"><span>XP</span><strong><span id="xp">0</span> / <span id="nextXp">100</span></strong></div>
+            <div class="progress" aria-label="XP progress"><span id="xpBar" style="width:0%"></span></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px">
+              <span class="badge" title="Eco-actions verified"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg> Verified Actions</span>
+              <span class="badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> On-chain Ready</span>
+              <span class="badge" id="roleBadge">No Role</span>
+            </div>
+            <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+              <button class="btn" id="btnSelectRole">Choose Role</button>
+              <button class="btn secondary" id="btnDaily">Claim Daily Quest</button>
+              <button class="btn ghost" id="btnExport">Export Profile</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 style="margin-top:0">Today’s Snapshot</h3>
+            <div class="list">
+              <div class="stat"><span>Active Quests</span><strong id="activeCount">0</strong></div>
+              <div class="stat"><span>Completed Quests</span><strong id="completedCount">0</strong></div>
+              <div class="stat"><span>Retroactive Rewards (sim.)</span><strong id="points">0 pts</strong></div>
+            </div>
+            <details style="margin-top:12px"><summary>How retroactive rewards work</summary>
+              <p class="muted" style="margin-top:8px">
+                Your impact data is logged locally now. When the Ethereum rewards contract goes live, you’ll be able to
+                submit your signed impact log to claim retroactive tokens. This UI stores data in <code class="inline">localStorage</code>.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROLES -->
+      <section id="roles">
+        <div class="cols">
+          <div class="card">
+            <h2 style="margin-top:0">Pick Your Archetype</h2>
+            <div class="list" id="roleList">
+              <!-- roles injected -->
+            </div>
+            <div style="margin-top:12px">
+              <button class="btn" id="btnAssignRole">Assign Selected Role</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3 style="margin-top:0">Role Perks</h3>
+            <ul id="rolePerks" class="muted" style="margin-top:6px">
+              <li>Select a role to view its perks.</li>
+            </ul>
+            <details style="margin-top:14px"><summary>Can I change roles later?</summary>
+              <p class="muted">Yes. You can multi-class, but your first role sets initial trait affinities.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUESTS -->
+      <section id="quests">
+        <div class="cols">
+          <div class="card">
+            <h2 style="margin:0 0 10px">Available Quests</h2>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px">
+              <span class="pill">Filter:</span>
+              <button class="btn ghost" data-filter="all">All</button>
+              <button class="btn ghost" data-filter="Seedbearer">Seedbearer</button>
+              <button class="btn ghost" data-filter="Hivemaker">Hivemaker</button>
+              <button class="btn ghost" data-filter="Waterkeeper">Waterkeeper</button>
+              <button class="btn ghost" data-filter="Mycelial Mapper">Mycelial Mapper</button>
+              <button class="btn ghost" data-filter="Data Weaver">Data Weaver</button>
+            </div>
+            <div id="questList" class="list"></div>
+          </div>
+          <div class="card">
+            <h3 style="margin-top:0">Your Quest Log</h3>
+            <div id="activeQuests" class="list"></div>
+            <hr style="border:0; border-top:1px solid #1a2a42; margin:12px 0" />
+            <h4>Completed</h4>
+            <div id="completedQuests" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INVENTORY -->
+      <section id="inventory">
+        <h2 style="margin-top:0">Items</h2>
+        <div id="items" style="margin-top:8px"></div>
+        <h2 style="margin-top:18px">Traits</h2>
+        <div id="traits" style="margin-top:8px"></div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills">
+        <h2 style="margin-top:0">Skills</h2>
+        <div id="skillsGrid" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
+          <!-- skills populate -->
+        </div>
+      </section>
+
+      <!-- LEADERBOARD -->
+      <section id="leaderboard">
+        <h2 style="margin-top:0">Local Leaderboard (demo)</h2>
+        <p class="muted">This ranks profiles saved on this device. For global rankings, wire to your backend later.</p>
+        <div id="board" class="list"></div>
+      </section>
+
+      <!-- DOCS -->
+      <section id="docs">
+        <h2 style="margin-top:0">Documentation</h2>
+        <details open><summary>Identity & Privacy</summary>
+          <div class="kv" style="margin-top:8px">
+            <div>Profile Mnemonic</div><div><code class="inline">12-word mnemonic</code> for this app only (NOT a wallet). Used to reimport your progress.</div>
+            <div>Storage</div><div>Local only via <code class="inline">localStorage</code>. Export JSON for backups.</div>
+          </div>
+        </details>
+        <details style="margin-top:10px"><summary>Retroactive Rewards</summary>
+          <p class="muted" style="margin-top:6px">
+            The “Claim” button prepares a signed payload (placeholder). Later, connect to your contracts to submit
+            proofs (e.g., EAS attestations, Merkle proofs, or onchain score aggregators).
+          </p>
+        </details>
+        <details style="margin-top:10px"><summary>Extending the System</summary>
+          <ul class="muted">
+            <li>Replace <code class="inline">ROLES</code> and <code class="inline">QUESTS</code> in the script with live registries.</li>
+            <li>Swap <code class="inline">generateMnemonic()</code> with BIP-39 (client-side) if desired. Keep it app-scoped.</li>
+            <li>Add wallet connect to sign messages and mint proofs.</li>
+            <li>Sync to a backend or IPFS periodically for auditability.</li>
+          </ul>
+        </details>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- Parallax section -->
+<section class="layer biomes">
+  <div class="shell card" style="text-align:center">
+    <h2 style="margin-top:0">Biome Progress Overlays</h2>
+    <p class="muted">Unlock biomes as your community completes restoration milestones.</p>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:14px">
+      <div class="card"><strong>Urban Canopy</strong><div class="progress" style="margin-top:8px"><span style="width:35%"></span></div></div>
+      <div class="card"><strong>Pollinator Corridors</strong><div class="progress" style="margin-top:8px"><span style="width:22%"></span></div></div>
+      <div class="card"><strong>Wetland Revival</strong><div class="progress" style="margin-top:8px"><span style="width:12%"></span></div></div>
+      <div class="card"><strong>Soil Health</strong><div class="progress" style="margin-top:8px"><span style="width:44%"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="layer footer">
+  <div class="shell" style="text-align:center">
+    <p class="muted">© <span id="year"></span> Gaia Swarm — Built for regenerative action.</p>
+  </div>
+</footer>
+
+<!-- Overlays -->
+<div class="overlay" id="overlayProfile" aria-hidden="true">
+  <div class="modal">
+    <h3 style="margin-top:0">Your Profile</h3>
+    <div class="kv">
+      <div>Username</div><div><input id="inpName" placeholder="Enter a display name" style="width:100%; padding:8px; border-radius:10px; border:1px solid #243654; background:#0a1422; color:var(--fg)"></div>
+      <div>Mnemonic</div><div><code class="inline" id="mnemonicBig"></code></div>
+      <div>Role</div><div id="roleBig">—</div>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap">
+      <button class="btn" id="btnSaveProfile">Save</button>
+      <button class="btn secondary" id="btnCopyMnemonic">Copy Mnemonic</button>
+      <button class="btn ghost" id="btnCloseProfile">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayHow" aria-hidden="true">
+  <div class="modal">
+    <h3 style="margin-top:0">How It Works</h3>
+    <ol class="muted" style="line-height:1.6">
+      <li>Click <strong>Get Started</strong> to generate a profile mnemonic (for this app only).</li>
+      <li>Choose a <strong>role</strong> to unlock themed quests.</li>
+      <li>Complete <strong>real-world actions</strong>; log them here (photos/notes optional in later build).</li>
+      <li>Earn <strong>XP</strong>, <strong>items</strong>, and <strong>traits</strong> that boost rewards.</li>
+      <li>When the rewards contract goes live, <strong>claim retroactive tokens</strong> with your signed impact log.</li>
+    </ol>
+    <div style="display:flex; gap:8px; margin-top:10px">
+      <button class="btn" id="btnCloseHow">Let’s go</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayImport" aria-hidden="true">
+  <div class="modal">
+    <h3 style="margin-top:0">Import Profile</h3>
+    <p class="muted">Paste your 12 words below.</p>
+    <textarea id="importText" rows="3" style="width:100%; padding:10px; border-radius:12px; background:#0a1422; border:1px solid #243654; color:var(--fg)"></textarea>
+    <div style="display:flex; gap:8px; margin-top:10px">
+      <button class="btn" id="btnDoImport">Import</button>
+      <button class="btn ghost" id="btnCloseImport">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlayClaim" aria-hidden="true">
+  <div class="modal">
+    <h3 style="margin-top:0">Retroactive Rewards (Preview)</h3>
+    <p class="muted">This prepares a deterministic claim payload. Later, connect wallet & submit onchain.</p>
+    <pre id="claimPayload" style="white-space:pre-wrap; background:#0b1320; padding:12px; border-radius:12px; border:1px solid #1a2a42; max-height:40vh; overflow:auto"></pre>
+    <div style="display:flex; gap:8px; margin-top:10px">
+      <button class="btn secondary" id="btnCopyClaim">Copy Payload</button>
+      <button class="btn" id="btnCloseClaim">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Utilities ---------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const now = () => new Date().toISOString();
+const store = {
+  load(){ try{ return JSON.parse(localStorage.getItem('gaia_profile')||'null') }catch{ return null } },
+  save(data){ localStorage.setItem('gaia_profile', JSON.stringify(data)); refreshUI() },
+  allProfiles(){ // simple local leaderboard using indexed profiles in localStorage
+    try{
+      const raw = JSON.parse(localStorage.getItem('gaia_profiles_index')||'[]');
+      return Array.isArray(raw) ? raw : [];
+    }catch{ return [] }
+  },
+  upsertIndex(profile){
+    const idx = store.allProfiles().filter(Boolean);
+    const i = idx.findIndex(p=>p.id===profile.id);
+    if(i>=0) idx[i]=profile; else idx.push(profile);
+    localStorage.setItem('gaia_profiles_index', JSON.stringify(idx));
+  }
+};
+
+// lightweight wordlist (app-scoped, not for wallets)
+const WORDS = ("acorn algae amber apex arch arbor aurora beacon berry bloom brook cedar clay comet coral cosmos creek dawn drift dune ember fern flint fog forge frost fungi gale glade glow grain grove harbor haze hearth hive kelp lichen lilac lithium lotus meadow mesa mist moss mycelium nexus oak ocean olive orb patch pearl pebble pine plume pollen prism quartz reed ripple river root sage sand seed shale sprout stem stone stream summit sun surge thicket tide trail trunk tulip vapor vine wave willow wind wisp").split(" ");
+
+// Generate 12-word mnemonic (NOT BIP-39; app identity only)
+function generateMnemonic() {
+  const rnd = new Uint32Array(12);
+  crypto.getRandomValues(rnd);
+  return Array.from(rnd, n => WORDS[n % WORDS.length]).join(' ');
+}
+
+// Simple hash
+async function sha256(text){
+  const enc = new TextEncoder().encode(text);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+/* ---------- Data ---------- */
+const ROLES = [
+  {
+    id:"Seedbearer",
+    perks:["+15% XP from planting","Unlocks Seed Map overlay","Trait bias: Vitality / Patience"],
+    sampleItems:["Seed Satchel","Germination Kit"],
+    sampleSkills:["Botany Basics","Propagation"],
+    color:"#7ef0a0"
+  },
+  {
+    id:"Hivemaker",
+    perks:["+10% XP from pollinator shelters","Bee Hotel + Bird Castle blueprints","Trait bias: Stewardship / Craft"],
+    sampleItems:["Mini Habitat Frame","Wildflower Mix"],
+    sampleSkills:["Habitat Carpentry","Pollinator Ecology"],
+    color:"#ffd27a"
+  },
+  {
+    id:"Waterkeeper",
+    perks:["+12% XP from water testing & cleanups","Watershed overlay","Trait bias: Clarity / Flow"],
+    sampleItems:["Test Strips","Trash Grabber"],
+    sampleSkills:["Riparian Care","Hydrology 101"],
+    color:"#8bb4ff"
+  },
+  {
+    id:"Mycelial Mapper",
+    perks:["+10% XP from soil & fungi surveys","Soil carbon tracker","Trait bias: Networks / Renewal"],
+    sampleItems:["Soil Probe","Spore Cards"],
+    sampleSkills:["Soil Science","Fungal ID"],
+    color:"#d3b3ff"
+  },
+  {
+    id:"Data Weaver",
+    perks:["+8% XP from verifications & uploads","Attestation tools","Trait bias: Insight / Order"],
+    sampleItems:["GPS Logger","Open Data Kit"],
+    sampleSkills:["Field QA","Geospatial Basics"],
+    color:"#6cf3c5"
+  }
+];
+
+const QUESTS = [
+  {id:"q1", role:"Seedbearer", name:"Plant 10 native seeds", xp:60, items:["Seed Satchel"], traits:["Vitality +1"], desc:"Plant native seeds in approved area. Log coordinates and species."},
+  {id:"q2", role:"Seedbearer", name:"Community seed exchange", xp:40, items:["Label Pack"], traits:["Patience +1"], desc:"Host or join a seed swap; share varieties and notes."},
+
+  {id:"q3", role:"Hivemaker", name:"Build a bee hotel", xp:80, items:["Mini Habitat Frame"], traits:["Stewardship +1"], desc:"Construct a habitat with proper hole diameters; mount safely."},
+  {id:"q4", role:"Hivemaker", name:"Install a bird castle", xp:90, items:["Timber Offcuts"], traits:["Craft +1"], desc:"Assemble a multi-chamber bird shelter from scrap wood."},
+
+  {id:"q5", role:"Waterkeeper", name:"Riverbank cleanup (5kg)", xp:70, items:["Grabber Tool"], traits:["Clarity +1"], desc:"Collect and sort waste along designated riparian zone."},
+  {id:"q6", role:"Waterkeeper", name:"Water quality test (3 sites)", xp:85, items:["Test Strips"], traits:["Flow +1"], desc:"Test pH, turbidity; record GPS and time."},
+
+  {id:"q7", role:"Mycelial Mapper", name:"Soil carbon baseline", xp:75, items:["Soil Probe"], traits:["Renewal +1"], desc:"Collect samples, note texture and organic matter."},
+  {id:"q8", role:"Mycelial Mapper", name:"Fungi survey (10 species)", xp:65, items:["Spore Cards"], traits:["Networks +1"], desc:"Photograph specimens; note habitat and substrate."},
+
+  {id:"q9", role:"Data Weaver", name:"Verify 5 community actions", xp:50, items:["Verifier Badge"], traits:["Insight +1"], desc:"Cross-check logs with photos/coordinates."},
+  {id:"q10", role:"Data Weaver", name:"Upload a weekly report", xp:55, items:["Report Template"], traits:["Order +1"], desc:"Aggregate impacts; produce open data entry."}
+];
+
+const SKILLS = [
+  {id:"botany", name:"Botany Basics", level:1, xp:0},
+  {id:"propagation", name:"Propagation", level:1, xp:0},
+  {id:"carpentry", name:"Habitat Carpentry", level:1, xp:0},
+  {id:"hydrology", name:"Hydrology 101", level:1, xp:0},
+  {id:"soil", name:"Soil Science", level:1, xp:0},
+  {id:"fungi", name:"Fungal ID", level:1, xp:0},
+  {id:"qa", name:"Field QA", level:1, xp:0},
+  {id:"geo", name:"Geospatial Basics", level:1, xp:0}
+];
+
+/* ---------- State ---------- */
+let state = store.load() || {
+  id:null, name:"New Steward", mnemonic:null, role:null,
+  xp:0, level:1, nextXp:100, points:0,
+  items:[], traits:[],
+  skills: SKILLS,
+  activeQuests:[], completedQuests:[],
+  createdAt: now(), updatedAt: now()
+};
+
+/* ---------- UI Wiring ---------- */
+function setTab(id){
+  $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===id));
+  $$('.tabpanes > section').forEach(s=>s.classList.toggle('active', s.id===id));
+  // Persist tab choice
+  localStorage.setItem('gaia_tab', id);
+}
+$('#tabs').addEventListener('click', e=>{
+  const t = e.target.closest('.tab'); if(!t) return; setTab(t.dataset.tab);
+});
+
+function refreshUI(){
+  state = store.load() || state;
+  $('#username').textContent = state.name || 'New Steward';
+  $('#mnemonic').textContent = state.mnemonic ? state.mnemonic.split(' ').slice(0,3).join(' ')+' …' : '—';
+  $('#mnemonicBig').textContent = state.mnemonic || '—';
+  $('#roleBadge').textContent = state.role ? state.role : 'No Role';
+  $('#roleBig').textContent = state.role || '—';
+  $('#level').textContent = state.level;
+  $('#xp').textContent = state.xp;
+  $('#nextXp').textContent = state.nextXp;
+  $('#points').textContent = state.points+' pts';
+  $('#xpBar').style.width = Math.min(100, (state.xp/state.nextXp)*100)+'%';
+  $('#activeCount').textContent = state.activeQuests.length;
+  $('#completedCount').textContent = state.completedQuests.length;
+
+  // Inventory
+  const items = state.items.map(i=>`<span class="tag">${i}</span>`).join('') || '<span class="muted">No items yet</span>';
+  const traits = state.traits.map(i=>`<span class="tag">${i}</span>`).join('') || '<span class="muted">No traits yet</span>';
+  $('#items').innerHTML = items;
+  $('#traits').innerHTML = traits;
+
+  // Skills grid
+  $('#skillsGrid').innerHTML = state.skills.map(s=>`
+    <div class="card">
+      <strong>${s.name}</strong>
+      <div class="kv" style="margin-top:6px">
+        <div>Level</div><div>${s.level}</div>
+        <div>XP</div><div>${s.xp}</div>
+      </div>
+      <div class="progress" style="margin-top:8px"><span style="width:${Math.min(100,(s.xp%100))}%"></span></div>
+    </div>
+  `).join('');
+
+  // Quests
+  renderQuestCatalog('all');
+  renderQuestLog();
+
+  // Roles list
+  $('#roleList').innerHTML = ROLES.map(r=>`
+    <label class="role">
+      <input type="radio" name="role" value="${r.id}">
+      <div>
+        <div style="display:flex; align-items:center; gap:8px">
+          <strong>${r.id}</strong>
+          <span class="pill" style="border-color:${r.color}; color:${r.color}">focus</span>
+        </div>
+        <div class="muted" style="margin-top:4px">${r.perks.join(' • ')}</div>
+      </div>
+    </label>
+  `).join('');
+
+  $('#rolePerks').innerHTML = state.role
+    ? (ROLES.find(r=>r.id===state.role)?.perks || []).map(p=>`<li>${p}</li>`).join('')
+    : `<li>Select a role to view its perks.</li>`;
+
+  // Leaderboard (local)
+  const board = store.allProfiles().sort((a,b)=> (b.points||0)-(a.points||0)).slice(0,10);
+  $('#board').innerHTML = board.length
+    ? board.map((p,i)=> `<div class="stat"><span>#${i+1} ${p.name||'Anon'}</span><strong>${p.points||0} pts</strong></div>`).join('')
+    : '<p class="muted">No local entries yet.</p>';
+}
+
+function renderQuestCatalog(filter){
+  const pool = filter==='all' ? QUESTS : QUESTS.filter(q=>q.role===filter);
+  $('#questList').innerHTML = pool.map(q=>`
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px">
+        <div>
+          <strong>${q.name}</strong> <span class="pill">${q.role}</span>
+          <div class="muted" style="margin-top:4px">${q.desc}</div>
+          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap">
+            <span class="badge">+${q.xp} XP</span>
+            ${q.items.map(i=>`<span class="badge">${i}</span>`).join('')}
+            ${q.traits.map(i=>`<span class="badge">${i}</span>`).join('')}
+          </div>
+        </div>
+        <button class="btn" data-accept="${q.id}">Accept</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderQuestLog(){
+  $('#activeQuests').innerHTML = state.activeQuests.length
+    ? state.activeQuests.map(q=>`
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:center">
+          <div>
+            <strong>${q.name}</strong> <span class="pill">${q.role}</span>
+            <div class="muted" style="margin-top:4px">${q.desc}</div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button class="btn secondary" data-complete="${q.id}">Complete</button>
+            <button class="btn ghost" data-abandon="${q.id}">Abandon</button>
+          </div>
+        </div>
+      </div>
+    `).join('')
+    : '<p class="muted">No active quests.</p>';
+
+  $('#completedQuests').innerHTML = state.completedQuests.length
+    ? state.completedQuests.map(q=>`<div class="stat"><span>${q.name}</span><strong>+${q.xp} XP</strong></div>`).join('')
+    : '<p class="muted">No completed quests yet.</p>';
+}
+
+/* ---------- Actions ---------- */
+function ensureProfile(){
+  if(!state.mnemonic){
+    state.mnemonic = generateMnemonic();
+    state.id = 'p_'+Math.random().toString(36).slice(2);
+    state.createdAt = now();
+    state.updatedAt = now();
+    store.save(state);
+  }
+}
+function acceptQuest(id){
+  const q = QUESTS.find(x=>x.id===id);
+  if(!q) return;
+  if(state.activeQuests.find(x=>x.id===id)) return;
+  state.activeQuests.push(q);
+  state.updatedAt = now();
+  store.save(state);
+}
+function abandonQuest(id){
+  state.activeQuests = state.activeQuests.filter(q=>q.id!==id);
+  state.updatedAt = now();
+  store.save(state);
+}
+function gainXP(amount){
+  // role perk modifiers
+  let bonus = 0;
+  if(state.role==='Seedbearer') bonus = Math.round(amount*0.15);
+  if(state.role==='Hivemaker') bonus = Math.round(amount*0.10);
+  if(state.role==='Waterkeeper') bonus = Math.round(amount*0.12);
+  if(state.role==='Mycelial Mapper') bonus = Math.round(amount*0.10);
+  if(state.role==='Data Weaver') bonus = Math.round(amount*0.08);
+  const total = amount + bonus;
+
+  state.xp += total;
+  state.points += Math.round(total/2); // demo points to convert later
+  while(state.xp >= state.nextXp){
+    state.xp -= state.nextXp;
+    state.level += 1;
+    state.nextXp = Math.round(state.nextXp * 1.25);
+    // Level up reward
+    state.items.push('Level Badge '+state.level);
+  }
+}
+function completeQuest(id){
+  const q = state.activeQuests.find(x=>x.id===id);
+  if(!q) return;
+  state.activeQuests = state.activeQuests.filter(x=>x.id!==id);
+  state.completedQuests.push({...q, completedAt: now()});
+  // rewards
+  gainXP(q.xp);
+  q.items.forEach(i=>{ if(!state.items.includes(i)) state.items.push(i) });
+  q.traits.forEach(t=>{ state.traits.push(t) });
+  // skill nudge
+  const skillHints = {
+    "Seedbearer":"Botany Basics",
+    "Hivemaker":"Habitat Carpentry",
+    "Waterkeeper":"Hydrology 101",
+    "Mycelial Mapper":"Soil Science",
+    "Data Weaver":"Field QA"
+  };
+  const hint = skillHints[q.role];
+  const s = state.skills.find(x=>x.name===hint);
+  if(s){ s.xp += Math.ceil(q.xp*0.6); if(s.xp>=100){ s.xp-=100; s.level++ } }
+  state.updatedAt = now();
+  store.save(state);
+}
+
+function assignSelectedRole(){
+  const sel = document.querySelector('input[name="role"]:checked');
+  if(!sel) return alert('Pick a role first.');
+  state.role = sel.value;
+  const role = ROLES.find(r=>r.id===state.role);
+  role.sampleItems.forEach(i=>{ if(!state.items.includes(i)) state.items.push(i) });
+  role.sampleSkills.forEach(n=>{
+    const s = state.skills.find(x=>x.name===n); if(s) s.xp+=20;
+  });
+  state.updatedAt = now();
+  store.save(state);
+  setTab('dashboard');
+}
+
+function claimDailyQuest(){
+  // Give a small randomized quest from role pool
+  const pool = state.role ? QUESTS.filter(q=>q.role===state.role) : QUESTS;
+  const q = pool[Math.floor(Math.random()*pool.length)];
+  acceptQuest(q.id);
+  alert('Daily quest added: '+q.name);
+  setTab('quests');
+}
+
+/* ---------- Event Listeners ---------- */
+$('#btnGetStarted').addEventListener('click', ()=>{
+  ensureProfile(); store.save(state);
+  $('#overlayHow').classList.add('show');
+});
+$('#btnHow').addEventListener('click', ()=> $('#overlayHow').classList.add('show'));
+$('#btnCloseHow').addEventListener('click', ()=> $('#overlayHow').classList.remove('show'));
+
+$('#btnImport').addEventListener('click', ()=> $('#overlayImport').classList.add('show'));
+$('#btnCloseImport').addEventListener('click', ()=> $('#overlayImport').classList.remove('show'));
+$('#btnDoImport').addEventListener('click', ()=>{
+  const words = ($('#importText').value||'').trim().toLowerCase().split(/\s+/);
+  if(words.length !== 12) return alert('Please enter exactly 12 words.');
+  state.mnemonic = words.join(' ');
+  state.id = 'p_'+Math.random().toString(36).slice(2);
+  state.updatedAt = now();
+  store.save(state);
+  $('#overlayImport').classList.remove('show');
+});
+
+$('#btnProfile').addEventListener('click', ()=>{
+  ensureProfile(); store.save(state);
+  $('#inpName').value = state.name || '';
+  $('#overlayProfile').classList.add('show');
+});
+$('#btnCloseProfile').addEventListener('click', ()=> $('#overlayProfile').classList.remove('show'));
+$('#btnSaveProfile').addEventListener('click', ()=>{
+  state.name = $('#inpName').value || 'New Steward';
+  state.updatedAt = now();
+  store.save(state);
+  $('#overlayProfile').classList.remove('show');
+});
+$('#btnCopyMnemonic').addEventListener('click', async ()=>{
+  await navigator.clipboard.writeText(state.mnemonic||'');
+  alert('Mnemonic copied (remember: app identity only, not a wallet).');
+});
+
+$('#btnSelectRole').addEventListener('click', ()=> setTab('roles'));
+$('#btnAssignRole').addEventListener('click', assignSelectedRole);
+$('#btnDaily').addEventListener('click', claimDailyQuest);
+
+$('#quests').addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  if(btn.dataset.accept){ acceptQuest(btn.dataset.accept) }
+  renderQuestLog();
+});
+$('#activeQuests').addEventListener('click', e=>{
+  const btn = e.target.closest('button');
+  if(!btn) return;
+  if(btn.dataset.complete){ completeQuest(btn.dataset.complete) }
+  if(btn.dataset.abandon){ abandonQuest(btn.dataset.abandon) }
+});
+$('#quests .btn.ghost, #quests .btn').forEach(b=>{
+  if(b.dataset.filter){ b.addEventListener('click', ()=> renderQuestCatalog(b.dataset.filter)) }
+});
+
+$('#btnExport').addEventListener('click', ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `gaia-profile-${(state.name||'anon').toLowerCase().replace(/\s+/g,'-')}.json`;
+  a.click(); URL.revokeObjectURL(url);
+});
+
+$('#btnClaim').addEventListener('click', async ()=>{
+  ensureProfile();
+  // Create a deterministic claim payload preview
+  const payload = {
+    id: state.id, name: state.name, role: state.role,
+    level: state.level, points: state.points, completed: state.completedQuests.map(q=>q.id),
+    timestamp: Date.now()
+  };
+  const digest = await sha256(JSON.stringify(payload));
+  $('#claimPayload').textContent = JSON.stringify({payload, digest, note:"Sign this off-chain with your wallet later."}, null, 2);
+  $('#overlayClaim').classList.add('show');
+});
+$('#btnCopyClaim').addEventListener('click', async ()=>{
+  await navigator.clipboard.writeText($('#claimPayload').textContent);
+  alert('Claim payload copied.');
+});
+$('#btnCloseClaim').addEventListener('click', ()=> $('#overlayClaim').classList.remove('show'));
+
+/* Footer year */
+$('#year').textContent = new Date().getFullYear();
+
+/* Restore last tab */
+const last = localStorage.getItem('gaia_tab') || 'dashboard';
+setTab(last);
+
+/* Init & persistence to local leaderboard on changes */
+if(!store.load()){ store.save(state) } else { refreshUI() }
+const _origSave = store.save;
+store.save = function(data){ _origSave(data); store.upsertIndex({
+  id:data.id, name:data.name, points:data.points, updatedAt:data.updatedAt
+}); refreshUI(); };
+
+// Role live preview
+$('#roles').addEventListener('change', e=>{
+  if(e.target.name==='role'){
+    const r = ROLES.find(x=>x.id===e.target.value);
+    $('#rolePerks').innerHTML = r.perks.map(p=>`<li>${p}</li>`).join('');
+  }
+});
+</script>
+</body>
+</html>
